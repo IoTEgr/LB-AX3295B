@@ -52,7 +52,7 @@ static s32 hal_sdGetVersion(void)
 		
 		goto SD_VER2;
 	}
-    
+   
 	//sd1.0
 	for (i=0; i<20*factor; i++)//2000
 	{
@@ -65,7 +65,7 @@ static s32 hal_sdGetVersion(void)
 		if((ax32xx_sd0GetRsp() & 0x00ff8000) != 0x00ff8000)
 		{
 			//debg("HAL : [SD] <ERROR> 1\n");
-		     goto SD_VER_END;	
+		     goto EMMC;	
 		}
 		if (ax32xx_sd0GetRsp() & 0x80000000)
 		{
@@ -75,13 +75,13 @@ static s32 hal_sdGetVersion(void)
 			goto SD_VER_END;
 		}
 	}
-
+EMMC:
 	//mmc
-	for (i=0; i<20*factor; i++)//2000
+	for (i=0; i<20; i++)//2000
 	{
-		if (ax32xx_sd0SendCmd(1, 0x00ff8000)<0)
+		if (ax32xx_sd0SendCmd(1, 0x40ff8000)<0)
 		{
-			continue;
+			goto SD_VER_END;
 		}
 		if (ax32xx_sd0GetRsp() & 0x80000000)
 		{
@@ -94,7 +94,7 @@ static s32 hal_sdGetVersion(void)
 
 	//no support
 	halSDCState.eVer = SDC_TYPE_NULL;
-	debg("HAL : [SD] <ERROR> not support\n");
+	//debg("HAL : [SD] <ERROR> not support\n");
 	return -1;
 
 	//sd2.0
@@ -288,7 +288,7 @@ static s32 hal_sdUpdate(void *pDataBuf, u32 dwLBA, u32 dwLBANum, u8 bRWMode)
 
 	  if(!bRWMode)
 	   ax32xx_sd0Recv((u32)pDataBuf , 512);
-	  if(ax32xx_sd0SendCmd(bRWMode ? 25 : 18, (SDC_TYPE_20_HC==halSDCState.eVer) ? dwLBA : (dwLBA<<9))<0)  //multiple write/read
+	   if(ax32xx_sd0SendCmd(bRWMode ? 25 : 18, (SDC_TYPE_20_HC==halSDCState.eVer || SDC_TYPE_MMC==halSDCState.eVer) ? dwLBA : (dwLBA<<9))<0)  //multiple write/read
 	      return -4;
 	  
 	  if(bRWMode)
@@ -409,9 +409,12 @@ s32 hal_sdInit(u8 sd_bus_width)
 			halSDCState.bus_width = SD_BUS_WIDTH1;
 			debg("HAL : <SD> sd 1line\n");
 		}
+		ax32xx_sd0ClkSet(SD_HS_CLK,SD_NS_CLK);	// set sd clk speed 
 	}
-	ax32xx_sd0ClkSet(SD_HS_CLK,SD_NS_CLK);	// set sd clk speed 
-
+	else
+	{
+		ax32xx_sd0ClkSet(SD_NS_CLK,SD_NS_CLK);	// set sd clk speed 
+	}
 	halSDCState.eCardState = SDC_STATE_FREE;
 
 

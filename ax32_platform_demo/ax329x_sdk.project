@@ -379,6 +379,7 @@
       <File Name="../device/cmos_sensor/SENSOR_GC0329.c"/>
       <File Name="../device/cmos_sensor/SENSOR_SIV100B.c"/>
       <File Name="../device/tft_lcd/lcd_mcu_st7789P3.c"/>
+      <File Name="../device/cmos_sensor/SENSOR_BF20A6.c"/>
     </VirtualDirectory>
     <VirtualDirectory Name="tft_lcd">
       <File Name="../device/tft_lcd/tft_lcd.h"/>

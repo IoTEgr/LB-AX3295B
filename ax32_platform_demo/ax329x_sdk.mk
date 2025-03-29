@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=jingcheng.huang
-Date                   :=2025/3/28
+Date                   :=2025/3/29
 CodeLitePath           :="c:\program files (x86)\codelite"
 LinkerName             :=C:/MinGW-4.7.1/bin/or1k-elf-ld.exe
 SharedObjectLinkerName :=C:/MinGW-4.7.1/bin/or1k-elf-g++.exe -shared -fPIC
@@ -86,10 +86,10 @@ Objects2=$(IntermediateDirectory)/lcd_ax32xx_lcd.c$(ObjectSuffix) $(Intermediate
 	$(IntermediateDirectory)/wav_pcm.c$(ObjectSuffix) $(IntermediateDirectory)/wav_ulaw.c$(ObjectSuffix) $(IntermediateDirectory)/wav_wav.c$(ObjectSuffix) 
 
 Objects3=$(IntermediateDirectory)/stream_stream.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_cmos_sensor.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF3a03.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF2013.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF3703.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0307.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0308.c$(ObjectSuffix) \
-	$(IntermediateDirectory)/cmos_sensor_SENSOR_GC0309.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0328.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_OV7670.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0838.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0A18.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0329.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SIV100B.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789P3.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_tft_lcd.c$(ObjectSuffix) \
-	$(IntermediateDirectory)/tft_lcd_lcd_mcu_ili9328.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352c.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_9225G.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_nv3030b.c$(ObjectSuffix) $(IntermediateDirectory)/nvfs_nvfs.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_max_user.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_uiDraw.c$(ObjectSuffix) $(IntermediateDirectory)/std_misc.c$(ObjectSuffix) $(IntermediateDirectory)/std_std_math.c$(ObjectSuffix) \
-	$(IntermediateDirectory)/std_str.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default_draw.c$(ObjectSuffix) $(IntermediateDirectory)/res_R.c$(ObjectSuffix) $(IntermediateDirectory)/res_R_icon.c$(ObjectSuffix) $(IntermediateDirectory)/res_R_string.c$(ObjectSuffix) $(IntermediateDirectory)/res_unicode_font.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_num3.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_num3_draw.c$(ObjectSuffix) \
-	
+	$(IntermediateDirectory)/cmos_sensor_SENSOR_GC0309.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0328.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_OV7670.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0838.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0A18.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0329.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SIV100B.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789P3.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/tft_lcd_tft_lcd.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_ili9328.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352c.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_9225G.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_nv3030b.c$(ObjectSuffix) $(IntermediateDirectory)/nvfs_nvfs.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_max_user.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_uiDraw.c$(ObjectSuffix) $(IntermediateDirectory)/std_misc.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/std_std_math.c$(ObjectSuffix) $(IntermediateDirectory)/std_str.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default_draw.c$(ObjectSuffix) $(IntermediateDirectory)/res_R.c$(ObjectSuffix) $(IntermediateDirectory)/res_R_icon.c$(ObjectSuffix) $(IntermediateDirectory)/res_R_string.c$(ObjectSuffix) $(IntermediateDirectory)/res_unicode_font.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_num3.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/res_ascii_num3_draw.c$(ObjectSuffix) 
 
 
 
@@ -1631,6 +1631,14 @@ $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789P3.c$(DependSuffix): ../device/tf
 
 $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789P3.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_st7789P3.c
 	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789P3.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_st7789P3.c"
+
+$(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(ObjectSuffix): ../device/cmos_sensor/SENSOR_BF20A6.c $(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/project/LB-AX3295B/kid_cam/device/cmos_sensor/SENSOR_BF20A6.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(DependSuffix): ../device/cmos_sensor/SENSOR_BF20A6.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(ObjectSuffix) -MF$(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(DependSuffix) -MM "../device/cmos_sensor/SENSOR_BF20A6.c"
+
+$(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(PreprocessSuffix): ../device/cmos_sensor/SENSOR_BF20A6.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(PreprocessSuffix) "../device/cmos_sensor/SENSOR_BF20A6.c"
 
 $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_st7789.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(DependSuffix)
 	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/project/LB-AX3295B/kid_cam/device/tft_lcd/lcd_mcu_st7789.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix) $(IncludePath)
