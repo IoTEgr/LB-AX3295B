@@ -156,23 +156,23 @@ u8 game_key_judge()
 {
 	// ok -- 0    U -- 485    D -- 305  L--660   R--815
 	gameGetKeyADCValue();
-	if((gameKeyADCValue >= 450) && (gameKeyADCValue < 550))
+	if (gameKeyADCValue >= 120 && gameKeyADCValue <= 140)
 	{
 		return GAME_KEY_U;
 	}
-	else if((gameKeyADCValue >= 290) && (gameKeyADCValue < 340))
+	else if (gameKeyADCValue >= 230 && gameKeyADCValue <= 250)
 	{
 		return GAME_KEY_D;
 	}
- 	else if((gameKeyADCValue >= 0) && (gameKeyADCValue < 50))
+	else if (gameKeyADCValue >= 500 && gameKeyADCValue <= 520)
 	{
 		return GAME_KEY_OK;
 	}
-	else if((gameKeyADCValue >= 640) && (gameKeyADCValue < 700))
+	else if (gameKeyADCValue >= 320 && gameKeyADCValue <= 350)
 	{
 		return GAME_KEY_L;
 	}
-	else if((gameKeyADCValue >= 790) && (gameKeyADCValue < 850))
+	else if (gameKeyADCValue >= 400 && gameKeyADCValue <= 450)
 	{
 		return GAME_KEY_R;
 	}
