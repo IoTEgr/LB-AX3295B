@@ -28,7 +28,7 @@
 
 #define CFG_WDT_EN 1 // watch dog
 
-#define CFG_MCU_DBG_EN 1
+#define CFG_MCU_DBG_EN 0
 #define CFG_MCU_TFDBG_EN 0
 //------------CHIP VISION
 #define THUNDERSE_A1 0x00000000
