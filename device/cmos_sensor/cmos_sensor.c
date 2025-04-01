@@ -1738,6 +1738,7 @@ void sensorChange()
 	hal_csiEnable(0);
 
 	dispLayerUninit(DISP_LAYER_VIDEO);
+	dispLayerUninit(DISP_LAYER_OSD0);
 	if (senser_select)
 	{
 		senser_select = 0;
@@ -1785,6 +1786,7 @@ void sensorChange()
 	hal_csiEnable(1);
 	XOSTimeDly(200);
 	dispLayerInit(DISP_LAYER_VIDEO);
+	dispLayerInit(DISP_LAYER_OSD0);
 }
 
 void sensor_rotate(u32 r)
