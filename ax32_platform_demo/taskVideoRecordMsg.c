@@ -372,6 +372,12 @@ static int videoKeyMsgRight(winHandle handle, uint32 parameNum, uint32 *parame)
 				}
 				SysCtrl.photo_task = 0;
 			}
+			if (configGet(CONFIG_ID_TIMESTAMP) != R_ID_STR_COM_ON)
+			{
+				winSetVisible(winItem(handle, VIDEO_SYSTIME_ID), true);
+				XOSTimeDly(10);
+				winSetVisible(winItem(handle, VIDEO_SYSTIME_ID), false);
+			}
 #endif
 		}
 	}

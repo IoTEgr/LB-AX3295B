@@ -497,7 +497,12 @@ static int photoKeyMsgRight(winHandle handle, uint32 parameNum, uint32 *parame)
 						break;
 				}
 			}
-			// SysCtrl.photo_task=0;
+		}
+		if (configGet(CONFIG_ID_TIMESTAMP) != R_ID_STR_COM_ON)
+		{
+			winSetVisible(winItem(handle, PHOTO_SYSTIME_ID), true);
+			XOSTimeDly(10);
+			winSetVisible(winItem(handle, PHOTO_SYSTIME_ID), false);
 		}
 #endif
 	}
@@ -667,7 +672,6 @@ static int photoSysMsg1S(winHandle handle, uint32 parameNum, uint32 *parame)
 			XMsgQPost(SysCtrl.sysQ, makeEvent(KEY_EVENT_PHOTO, KEY_PRESSED));
 		}
 	}
-
 	return 0;
 }
 
