@@ -61,7 +61,6 @@ static int mainMenuKeyMsgOk(winHandle handle, uint32 parameNum, uint32 *parame)
 		}
 		else if (1 == SysCtrl.mainmenu_taskidx)
 		{
-
 			taskStart(TASK_VIDEO_RECORD, 0);
 		}
 		else if (2 == SysCtrl.mainmenu_taskidx)
@@ -70,12 +69,10 @@ static int mainMenuKeyMsgOk(winHandle handle, uint32 parameNum, uint32 *parame)
 		}
 		else if (3 == SysCtrl.mainmenu_taskidx)
 		{
-
 			taskStart(TASK_AUDIO_PLAYER, 0);
 		}
 		else if (4 == SysCtrl.mainmenu_taskidx)
 		{
-
 			taskStart(TASK_GAME_MENU, 0);
 		}
 		else if (5 == SysCtrl.mainmenu_taskidx)
