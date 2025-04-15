@@ -140,4 +140,23 @@
 
 #define FILEDIR_MP3 "MP3/"
 
+/*= == == = watermark == =*/
+#define WATER_CHAR_GAP 0 // watermark character gap
+#define ST_PIXEL_W 16    // res pic's w
+#define ST_PIXEL_H 32    // res pic's h
+
+#define RESOLUTION_VGA
+
+#define WATERMAKE_SET_X_POS 10 // watermark X pos
+
+#if defined(RESOLUTION_VGA)
+#define WATERMAKE_SET_Y_POS 448 // watermark Y pos
+#elif defined(RESOLUTION_720P)
+#if PIC_16_9
+#define WATERMAKE_SET_Y_POS 328 // watermark Y pos
+#else
+#define WATERMAKE_SET_Y_POS 688
+#endif
+#endif
+
 #endif

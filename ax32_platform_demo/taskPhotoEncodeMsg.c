@@ -30,8 +30,9 @@ INT32S R_FRAME[ICON_FRAME_NUM] = {
 	RES_FRAME_HOME2,
 	RES_FRAME_HOME3,
 	RES_FRAME_HOME4,
-};
 #else // 20
+}
+;
 
 #endif
 
@@ -43,6 +44,22 @@ extern int image_take_photo_to_sdram();
 u32 photo_focus_show_count = 0;
 static u8 *focus_sound = 0;
 static s32 focus_sound_size = 0;
+
+u8 *small_pic_id_buf[20];
+u32 small_pic_id[20] = {
+	RES_NUM_0,
+	RES_NUM_1,
+	RES_NUM_2,
+	RES_NUM_3,
+	RES_NUM_4,
+	RES_NUM_5,
+	RES_NUM_6,
+	RES_NUM_7,
+	RES_NUM_8,
+	RES_NUM_9,
+	RES_NUM_SLASH,
+	RES_NUM_COLON,
+	RES_NUM_BLANK};
 void photoFocusIconCancel(winHandle handle)
 {
 	if (SysCtrl.photo_focus == PHOTO_FOCUS_ICON_RED)

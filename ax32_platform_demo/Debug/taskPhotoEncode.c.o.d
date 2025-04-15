@@ -98,7 +98,8 @@ Debug/taskPhotoEncode.c.o: taskPhotoEncode.c application.h \
  ../sUI/stringIcon.h ../sUI/rect.h ../sUI/itemManage.h ../sUI/menuItem.h \
  ../sUI/menuOption.h ../sUI/progressBar.h ../sUI/menuItemEx.h \
  ../sUI/widgetManage.h menu.h userInterface.h \
- ../multimedia/imageL/inc/imageL_encode.h
+ ../multimedia/imageL/inc/imageL_encode.h \
+ ../multimedia/watermark/image_watermark.h
 
 application.h:
 
@@ -467,3 +468,5 @@ menu.h:
 userInterface.h:
 
 ../multimedia/imageL/inc/imageL_encode.h:
+
+../multimedia/watermark/image_watermark.h:

@@ -1,6 +1,7 @@
 #include "application.h"
 #include "userInterface.h"
 #include "../multimedia/imageL/inc/imageL_encode.h"
+#include "../multimedia/watermark/image_watermark.h"
 
 extern msgDealInfor photoEncodeMsgDeal[];
 extern sysTask taskPhotoEncode;
@@ -195,18 +196,20 @@ int image_take_photo(void)
 		fHandle = task_image_createfile(VIDEO_CH_A, &name);
 		if (fHandle < 0)
 			goto TAKE_PHOTO_END;
-
-		deg_Printf("take photoA : [%d:%d]\n", width, height);
-
-		// ret = imageEncodeStart((FHANDLE)fHandle,width,height,q,timestramp,frame_enable);
+		yuv_rgb_table_init();
+		watermark_bmp2yuv_init(ST_PIXEL_W, ST_PIXEL_H, SM_PIC_ST_NUM);
+		// watermark_bmp2yuv_init(ST_PIXEL_W, ST_PIXEL_H, SM_PIC_ST_NUM);
+		//  ret = imageEncodeStart((FHANDLE)fHandle,width,height,q,timestramp,frame_enable);
 		if (configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_16M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_18M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_20M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_24M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_40M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_48M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_12M)
 		{ // configGet(CONFIG_ID_PRESLUTION)==R_ID_STR_RES_20M || configGet(CONFIG_ID_PRESLUTION)==R_ID_STR_RES_48M){
 			ret = imageEncodeQuadStart(name, (FHANDLE)fHandle, width, height, JPEG_Q_27, timestramp, frame_enable);
 		}
 		else
 		{
-			ret = imageEncodeStart((FHANDLE)fHandle, width, height, q, timestramp, frame_enable);
+			ret = imageEncodeStart((FHANDLE)fHandle, width, height, JPEG_Q_27, timestramp, frame_enable);
 		}
+		watermark_buf_bmp2yuv_free();
+		yuv_rgb_table_uninit();
 		if (ret < 0)
 		{
 			deg_Printf("photo : take photo fail.<%d>\n", ret);
@@ -269,12 +272,9 @@ int image_take_photo(void)
 
 #endif
 		//===end handle exif===
-
 		deamon_fsSizeModify(-1, fs_size(fHandle));
-
 		close(fHandle);
 		managerAddFile(SysCtrl.jpg_list, FILEDIR_PHOTO, &name[strlen(FILEDIR_PHOTO)]);
-		deg_Printf("photoA : take photo ok.<%s>\n", name);
 
 		if (picSum > 0)
 			picSum--;
@@ -326,7 +326,7 @@ int image_take_photo_to_sdram()
 		return 1;
 	}
 
-	if (SysCtrl.photo_mode_switch == 3) // Ïà¿ò
+	if (SysCtrl.photo_mode_switch == 3) // ï¿½ï¿½ï¿½
 	{
 		q_idx = 0;
 	}
@@ -350,7 +350,9 @@ int image_take_photo_to_sdram()
 			q_idx = 4;
 		}
 	}
-	hal_mjpegPhotoStart(image_width, image_height, jpg_encode_q_talbe[q_idx], timestramp, frame_enable);
+	yuv_rgb_table_init();
+	watermark_bmp2yuv_init(ST_PIXEL_W, ST_PIXEL_H, SM_PIC_ST_NUM);
+	hal_mjpegPhotoStart(image_width, image_height, jpg_encode_q_talbe[q_idx], 0 /*timestramp*/, frame_enable);
 
 	//==wait csi yuv buf ok==
 	timeout = XOSTimeGet();
@@ -385,13 +387,15 @@ int image_take_photo_to_sdram()
 	//==end set lcd image stop==
 
 	boardIoctrl(SysCtrl.bfd_led, IOCTRL_LED_NO0, 1);
-
 	if (0 == res)
 	{
 		//==software handle yuv buf ==
 		hal_mjpeg_software_handle_csi_yuvbuf();
 		//==end software handle yuv buf ==
-
+		if (timestramp)
+		{
+			watermark_bmp2yuv_draw((u8 *)mjpegEncCtrl.ybuffer, WATERMAKE_SET_X_POS, WATERMAKE_SET_Y_POS, WATER_CHAR_GAP);
+		}
 		//==wait jpg encode==
 		ax32xx_mjpeg_manual_on();
 		ax32xx_intEnable(IRQ_JPGA, 1); // enable jpegirq
@@ -421,7 +425,8 @@ int image_take_photo_to_sdram()
 		}
 		//==end wait jpg encode==
 	}
-
+	watermark_buf_bmp2yuv_free();
+	yuv_rgb_table_uninit();
 	if (0 == res)
 	{
 		u32 jpg_addr;
@@ -469,9 +474,6 @@ int image_take_photo_to_sdram()
 	boardIoctrl(SysCtrl.bfd_led, IOCTRL_LED_NO0, 1);
 
 	hal_mjpegEncodeStop();
-
-	if (timestramp)
-		videoRecordImageWatermark(image_width, image_height, 0); // disable
 
 	return res;
 }

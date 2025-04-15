@@ -361,6 +361,9 @@
         <File Name="../multimedia/imageL/inc/imageL_encode.h"/>
       </VirtualDirectory>
     </VirtualDirectory>
+    <VirtualDirectory Name="watermark">
+      <File Name="../multimedia/watermark/image_watermark.h"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="device">
     <VirtualDirectory Name="coms_sensor">
@@ -503,6 +506,7 @@
         <LibraryPath Value="C:/MinGW-4.7.1/lib/gcc/or1k-elf/4.9.1"/>
         <LibraryPath Value="C:/MinGW-4.7.1/or1k-elf/lib"/>
         <Library Value="limage"/>
+        <Library Value="watermark"/>
         <Library Value="effect"/>
         <Library Value="mp3"/>
         <Library Value="sd"/>

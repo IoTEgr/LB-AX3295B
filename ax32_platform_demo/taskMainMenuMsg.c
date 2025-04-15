@@ -10,8 +10,8 @@ static u32 mainmenu_show_time;
 static u8 *mainmenu_bk_buf = NULL;
 static u16 bk_w, bk_h;
 
-static u32 mainmenu_jgp_id[MAINMENU_TASK_NUM] = {RES_MAIN_PHOTO_BK, RES_MAIN_VIDEO_BK, RES_MAIN_PLAYBACK_BK,
-												 RES_MAIN_MP3_BK, RES_MAIN_GAME_BK, RES_MAIN_SETTING_BK};
+static u32 mainmenu_jgp_id[MAINMENU_TASK_NUM] = {RES_MAIN_GAME_BK, RES_MAIN_MP3_BK, RES_MAIN_PLAYBACK_BK, RES_MAIN_PHOTO_BK, RES_MAIN_VIDEO_BK,
+												 RES_MAIN_SETTING_BK};
 
 static void mainMenu_showbuf(void)
 {
@@ -57,11 +57,11 @@ static int mainMenuKeyMsgOk(winHandle handle, uint32 parameNum, uint32 *parame)
 
 		if (0 == SysCtrl.mainmenu_taskidx)
 		{
-			taskStart(TASK_PHOTO_ENCODE, 0);
+			taskStart(TASK_GAME_MENU, 0);
 		}
 		else if (1 == SysCtrl.mainmenu_taskidx)
 		{
-			taskStart(TASK_VIDEO_RECORD, 0);
+			taskStart(TASK_AUDIO_PLAYER, 0);
 		}
 		else if (2 == SysCtrl.mainmenu_taskidx)
 		{
@@ -69,11 +69,11 @@ static int mainMenuKeyMsgOk(winHandle handle, uint32 parameNum, uint32 *parame)
 		}
 		else if (3 == SysCtrl.mainmenu_taskidx)
 		{
-			taskStart(TASK_AUDIO_PLAYER, 0);
+			taskStart(TASK_PHOTO_ENCODE, 0);
 		}
 		else if (4 == SysCtrl.mainmenu_taskidx)
 		{
-			taskStart(TASK_GAME_MENU, 0);
+			taskStart(TASK_VIDEO_RECORD, 0);
 		}
 		else if (5 == SysCtrl.mainmenu_taskidx)
 		{
@@ -294,6 +294,7 @@ static int mainMenuSysMsg500MS(winHandle handle, uint32 parameNum, uint32 *param
 }
 static int mainMenuSysMsg1S(winHandle handle, uint32 parameNum, uint32 *parame)
 {
+	MainMenuBaterryShow(handle);
 	return 0;
 }
 msgDealInfor mainMenuMsgDeal[] =
