@@ -141,6 +141,7 @@
 #define FILEDIR_MP3 "MP3/"
 
 /*= == == = watermark == =*/
+#define CHANGE_4_3 1
 #define WATER_CHAR_GAP 0 // watermark character gap
 #define ST_PIXEL_W 16    // res pic's w
 #define ST_PIXEL_H 32    // res pic's h

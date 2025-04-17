@@ -112,6 +112,7 @@ static u8 gameTickCount = 0;
 
 static u32 gameKeyADCValue = 1024;
 static u32 gameKeyCount = 1;
+static u32 gameKeySoundCount = 1;
 static u32 gameKeyMusicCount = 0;
 static u8 gameKeyType = GAME_KEY_NONE;
 
@@ -200,15 +201,23 @@ void game_key_event()
 	if (gameKeyType != get_key)
 	{
 		gameKeyCount = 1;
+		gameKeySoundCount = 1;
 		gameKeyType = get_key;
 	}
 	else
 	{
 		gameKeyCount++;
+		gameKeySoundCount++;
+		if (audioPlaybackGetStatus() == MEDIA_STAT_PLAY)
+		{
+			gameKeySoundCount = 1;
+		}
+
 		if (gameKeyCount == 4 && gameKeyType != GAME_KEY_NONE)
 		{
 			XMsgQPost(SysCtrl.sysQ, (void *)makeEvent(msgEvent[gameKeyType], 0));
-			game_audio_play(RES_MUSIC_KEY_SOUND, 0, 0);
+			if (gameKeySoundCount == 4 && audioPlaybackGetStatus() == MEDIA_STAT_STOP)
+				game_audio_play(RES_MUSIC_KEY_SOUND, 0, 0);
 			fps_count_reset();
 		}
 		else
@@ -216,7 +225,8 @@ void game_key_event()
 			if (gameKeyCount % 10 == 0 && gameKeyType != GAME_KEY_NONE)
 			{
 				XMsgQPost(SysCtrl.sysQ, (void *)makeEvent(msgEvent[gameKeyType], 0));
-				game_audio_play(RES_MUSIC_KEY_SOUND, 0, 0);
+				if ((gameKeySoundCount % 10 == 0 && audioPlaybackGetStatus() == MEDIA_STAT_STOP) || gameEntry == game_maze_entry || gameEntry == game_tetris_entry || gameEntry == game_sokoban_entry)
+					game_audio_play(RES_MUSIC_KEY_SOUND, 0, 0);
 				fps_count_reset();
 			}
 		}

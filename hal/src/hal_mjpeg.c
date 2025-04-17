@@ -1248,6 +1248,90 @@ u8 hal_mjpg_scale_down(u8 *jpeg_src, u16 dst_width, u16 dst_height, u8 q, u32 *j
 
 	return ret;
 }
+void hal_mjpeg_manual_fdown_mini(int flag)
+{
+
+#define _JPG_SIZE_MIN_DEF_ (60 * 1024)
+
+	u32 addr, len;
+	s32 mjp_sync;
+	s32 mjp_sync_next;
+	if (flag & ((1 << MJPEG_IRQ_OUTPAUSE) | (1 << MJPEG_IRQ_FRAMEEND)))
+	{
+		mjpegEncCtrl.jfcnt++;
+		mjp_sync = hal_audc_stamp_out();
+		mjp_sync_next = hal_audc_stamp_next();
+		if (mjpegEncCtrl.type == MJPEG_TYPE_UVC)
+		{
+			// if(flag&(1<<MJPEG_IRQ_OUTPAUSE))
+			//	hal_mjpegUVCPackage();
+			if (flag & (BIT(MJPEG_IRQ_FRAMEEND) | BIT(MJPEG_IRQ_OUTPAUSE)))
+			{
+				len = ax32xx_mjpegEncodeLoadAddrGet() - mjpegEncCtrl.curBuffer;
+				if (!mjpegEncCtrl.drop)
+				{
+					len = (hal_mjpegCallback_state(flag)) ? len : 0; // MJPEC?
+					debg("len:%d\n", len);
+					hal_streamIn(&mjpegEncCtrl.vids, mjpegEncCtrl.curBuffer, len, mjp_sync, mjp_sync_next);
+				}
+				// debg("ulen:%dK\n",len/1024);
+				mjpegEncCtrl.curLen = (len > _JPG_SIZE_MIN_DEF_) ? (len * 2) : (_JPG_SIZE_MIN_DEF_ * 2);
+#if HAL_CFG_MJPEG_QULITY_AUTO > 0
+				if (mjpegEncCtrl.q_auto != JPEG_Q_AUTO)
+				{
+					if (mjpegEncCtrl.mjpeg_height <= 720)
+					{
+						ax32xx_mjpegEncodeQadj(len, HAL_CFG_MJPEG_720_SIZE_MIN, HAL_CFG_MJPEG_720_SIZE_MAX, 0);
+					}
+					else
+					{
+						ax32xx_mjpegEncodeQadj(len, HAL_CFG_MJPEG_1080_SIZE_MIN, HAL_CFG_MJPEG_1080_SIZE_MAX, 1);
+					}
+				}
+				hal_mjpegQualityAjust(len);
+#endif
+			}
+		}
+		else
+		{
+			if (flag & (BIT(MJPEG_IRQ_FRAMEEND) | BIT(MJPEG_IRQ_OUTPAUSE)))
+			{
+				debg("??????\r\n");
+				len = ax32xx_mjpegEncodeLoadAddrGet() - mjpegEncCtrl.curBuffer;
+				len = (len + 0x1ff) & (~0x1ff);
+				debg("mjpegEncCtrl.drop:%d len:%d\r\n", mjpegEncCtrl.drop, len);
+				if (!mjpegEncCtrl.drop)
+				{
+					len = (hal_mjpegCallback_state(flag)) ? len : 0; // MJPEC?
+					debg("[%d + %d ", hal_stream_size(&mjpegEncCtrl.vids), len);
+					hal_streamIn(&mjpegEncCtrl.vids, mjpegEncCtrl.curBuffer, len, mjp_sync, mjp_sync_next);
+					debg("[+ %d]\n", hal_stream_size(&mjpegEncCtrl.vids));
+					if (len && (mjpegEncCtrl.type == MJPEG_TYPE_PHOTO)) // only need one frame
+						ax32xx_mjpegEncodeEnable(0);
+				}
+				// mjpegEncCtrl.curLen = (len > _JPG_SIZE_MIN_DEF_)? (len*2) : _JPG_SIZE_MIN_DEF_*2;
+				debg("mjpegEncCtrl.curLen:%d\r\n", mjpegEncCtrl.curLen);
+#if HAL_CFG_MJPEG_QULITY_AUTO > 0
+				if (mjpegEncCtrl.q_auto != JPEG_Q_AUTO)
+				{
+					if (mjpegEncCtrl.mjpeg_height <= 720)
+					{
+						ax32xx_mjpegEncodeQadj(len, HAL_CFG_MJPEG_720_SIZE_MIN, HAL_CFG_MJPEG_720_SIZE_MAX, 0);
+					}
+					else
+					{
+						ax32xx_mjpegEncodeQadj(len, HAL_CFG_MJPEG_1080_SIZE_MIN, HAL_CFG_MJPEG_1080_SIZE_MAX, 1);
+					}
+				}
+				hal_mjpegQualityAjust(len);
+#endif
+			}
+		}
+		mjpegEncCtrl.curBuffer = addr;
+		mjpegEncCtrl.drop = 0;
+		ax32xx_mjpegEncodeBufferSet(mjpegEncCtrl.curBuffer, mjpegEncCtrl.curBuffer + mjpegEncCtrl.curLen);
+	}
+}
 /*******************************************************************************
  * Function Name  : hal_mjpegUVCInit
  * Description    : hal layer .mjpeg initial for uvc
@@ -1440,10 +1524,7 @@ int hal_mjpegPhotoStart(u16 win_w, u16 win_h, u8 quality, u8 timestramp, u8 fram
 
 		ax32xx_mjpegEncodeQuilitySet(quality);
 		ax32xx_mjpegEncodeInfoSet(0);
-		// deg_Printf("watermark_bmp2yuv_draw\n");
 		videoRecordImageWatermark(win_w, win_h, timestramp);
-		// watermark_bmp2yuv_draw((u8 *)mjpegEncCtrl.ybuffer, WATERMAKE_SET_X_POS, WATERMAKE_SET_Y_POS, WATER_CHAR_GAP);
-		// deg_Printf("watermark_bmp2yuv_draw end\n");
 		hal_streamInit(&mjpegEncCtrl.vids, mjpegEncCtrl.mjpegNode, MJPEG_ITEM_NUM, (u32)mjpegEncCtrl.mjpbuf, mjpegEncCtrl.mjpsize);
 		if (mjpegEncCtrl.curBuffer == NULL)
 			mjpegEncCtrl.curBuffer = hal_streamMalloc(&mjpegEncCtrl.vids, mjpegEncCtrl.mjpsize);

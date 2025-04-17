@@ -413,6 +413,175 @@ int imageEncodeUninit(void)
 	//	csi_off();
 	return 0;
 }
+int hal_mjpegPhotoStart2(u16 win_w, u16 win_h, u8 quality, u8 timestramp, u8 frame_enable, u8 type1, u8 type2)
+{
+	hal_mjpegEncodeInit();
+	hal_mjpeg_queue_init();
+	hal_mjpeg_rev_buf_init();
+	mjpegEncCtrl.frame_enable = frame_enable;
+	mjpegEncCtrl.line_buf_using = 0;
+#if CHANGE_4_3
+	if (0)
+#else
+	if ((mjpegEncCtrl.csi_width > win_w) || (mjpegEncCtrl.csi_height > win_h))
+#endif
+	{
+		mjpegEncCtrl.csi_to_mjpeg_dma = 1;
+		mjpegEncCtrl.type = 1;
+		mjpegEncCtrl.mjpeg_width = win_w;
+		mjpegEncCtrl.mjpeg_height = win_h;
+
+#if HAL_CFG_MJPEG_QULITY_AUTO > 0
+		mjpegEncCtrl.qulity = hal_mjpegQualityCheck(quality);
+#endif
+		if (!ax32xx_hvScaler(mjpegEncCtrl.csi_width, mjpegEncCtrl.csi_height, win_w, win_h))
+		{
+			return -1;
+		}
+		ax32xx_csihv_tomjp_dma_cfg((u8 *)mjpegEncCtrl.ybuffer, (u8 *)mjpegEncCtrl.uvbuffer, win_h, win_w);
+
+		hal_streamInit(&mjpegEncCtrl.vids, mjpegEncCtrl.mjpegNode, MJPEG_ITEM_NUM, (u32)mjpegEncCtrl.mjpbuf, mjpegEncCtrl.mjpsize);
+		if (mjpegEncCtrl.curBuffer == NULL)
+			mjpegEncCtrl.curBuffer = hal_streamMalloc(&mjpegEncCtrl.vids, mjpegEncCtrl.mjpsize);
+		if (mjpegEncCtrl.curBuffer == 0)
+			return -1;
+		mjpegEncCtrl.curLen = mjpegEncCtrl.mjpsize;
+		ax32xx_mjpegEncodeBufferSet(mjpegEncCtrl.curBuffer, mjpegEncCtrl.curBuffer + mjpegEncCtrl.curLen);
+
+		ax32xx_mjpegEncodeInit(1, 0);
+		ax32xx_mjpeg_inlinebuf_init((u8 *)mjpegEncCtrl.ybuffer, (u8 *)mjpegEncCtrl.uvbuffer);
+		// ax32xx_mjpeg_inlinebuf_init((u8*)mjpeg_yuv_add,(u8*)&mjpeg_yuv_add[CSI_TO_MJPEG_SIZE]);
+		ax32xx_mjpegEncodeSizeSet(mjpegEncCtrl.csi_width, mjpegEncCtrl.csi_height, mjpegEncCtrl.mjpeg_width, mjpegEncCtrl.mjpeg_height);
+#if HAL_CFG_MJPEG_QULITY_AUTO > 0
+		ax32xx_mjpegEncodeQuilitySet(mjpegEncCtrl.qulity);
+#endif
+		ax32xx_mjpegEncodeInfoSet(0);
+		videoRecordImageWatermark(win_w, win_h, timestramp);
+
+		ax32xx_csiISRRegiser(CSI_IRQ_JPG_FRAME_END, NULL);
+		ax32xx_csiISRRegiser(CSI_IRQ_SEN_STATE_INT, NULL);
+		ax32xx_csiISRRegiser(CSI_IRQ_VXY_FRAME_EN, (void *)hal_mjpeg_manual_on);
+		ax32xx_mjpegEA_ncodeISRRegister(hal_mjpeg_manual_fdown);
+		ax32xx_csiOutputSet(CSI_OUTPUT_WIFIEN, 1);
+		ax32xx_csiEnable(1);
+		mjpegEncCtrl.drop = 0;
+	}
+	else
+	{
+		mjpegEncCtrl.csi_to_mjpeg_dma = 2;
+		mjpegEncCtrl.type = 1;
+		mjpegEncCtrl.mjpeg_width = win_w;
+		mjpegEncCtrl.mjpeg_height = win_h;
+		quality = hal_mjpegQualityCheck(quality);
+
+		// ax32xx_csiScaler(mjpegEncCtrl.csi_width,mjpegEncCtrl.csi_height, win_w, win_h,0,0,mjpegEncCtrl.csi_width, mjpegEncCtrl.csi_height);
+		// ax32xx_csiMJPEGFrameSet(mjpegEncCtrl.ybuffer,mjpegEncCtrl.uvbuffer,HAL_CFG_MJPEG_HEIGHT,HAL_CFG_MJPEG_WIDTH);//mjpegEncCtrl.csi_height,mjpegEncCtrl.csi_width);
+		ax32xx_mjpegEncodeInit(1, 0);
+		// ax32xx_mjpegEncodeSizeSet(mjpegEncCtrl.csi_width,mjpegEncCtrl.csi_height, win_w, win_h);
+		ax32xx_mjpeg_inlinebuf_init((u8 *)mjpegEncCtrl.ybuffer, (u8 *)mjpegEncCtrl.uvbuffer);
+		// ax32xx_mjpeg_inlinebuf_init((u8*)mjpeg_yuv_add,(u8*)&mjpeg_yuv_add[CSI_TO_MJPEG_SIZE]);
+
+		if (type2)
+		{
+			u16 csi_w, csi_h, crop_w, crop_h;
+			u16 sx, sy, ex, ey, cropcsi_w, cropcsi_h;
+			cropcsi_w = devSensorOp->pixelw;
+			cropcsi_h = devSensorOp->pixelh;
+			hal_csiResolutionGet(&csi_w, &csi_h);
+#if CHANGE_4_3
+#if 0
+				    crop_w =  ((cropcsi_w * (100 - SysCtrl.crop_level*5/3) / 100) + 0x1f) & (~0x1f);
+				    crop_h = (cropcsi_h * (100 - SysCtrl.crop_level*5/3) / 100) & ~1;
+#else
+			crop_w = cropcsi_w - SysCtrl.crop_level * 16;
+			crop_h = cropcsi_h - SysCtrl.crop_level * 12;
+#endif
+#else
+			crop_w = ((csi_w * (100 - SysCtrl.crop_level * 5 / 3) / 100) + 0x1f) & (~0x1f);
+			crop_h = (csi_h * (100 - SysCtrl.crop_level * 5 / 3) / 100) & ~1;
+#endif
+			sx = (csi_w - crop_w) / 2;
+			ex = sx + crop_w;
+			sy = (csi_h - crop_h) / 2;
+			ey = sy + crop_h;
+
+			ax32xx_csiScaler(csi_w, csi_h, crop_w, crop_h, sx, sy, ex, ey);
+			ax32xx_mjpegEncodeSizeSet(crop_w, crop_h, win_w, win_h);
+			ax32xx_csiMJPEGFrameSet(mjpegEncCtrl.ybuffer, mjpegEncCtrl.uvbuffer, HAL_CFG_MJPEG_HEIGHT, crop_w);
+			deg_Printf("fangda\r\n");
+		}
+		else
+		{
+#if CHANGE_4_3
+			ax32xx_mjpegEncodeSizeSet(devSensorOp->pixelw, devSensorOp->pixelh, win_w, win_h);
+#else
+			ax32xx_mjpegEncodeSizeSet(mjpegEncCtrl.csi_width, mjpegEncCtrl.csi_height, win_w, win_h);
+#endif
+			ax32xx_csiMJPEGFrameSet(mjpegEncCtrl.ybuffer, mjpegEncCtrl.uvbuffer, win_h, win_w);
+		}
+
+		ax32xx_mjpegEncodeQuilitySet(quality);
+		ax32xx_mjpegEncodeInfoSet(0);
+		if ((type2 && !type1) || (!type1 && !type2))
+			videoRecordImageWatermark(win_w, win_h, timestramp);
+
+		if (type2)
+		{
+			hal_streamInit(&mjpegEncCtrl.vids, mjpegEncCtrl.mjpegNode, MJPEG_ITEM_NUM, (u32)mjpegEncCtrl.mjpbuf, mjpegEncCtrl.mjpsize);
+			deg_Printf("the vids == 0x%x,the jpegNode == 0x%x mjpegEncCtrl.mjpsize:%d\r\n",
+					   mjpegEncCtrl.vids, mjpegEncCtrl.mjpegNode, mjpegEncCtrl.mjpsize);
+		}
+		if (mjpegEncCtrl.curBuffer == NULL)
+			mjpegEncCtrl.curBuffer = hal_streamMalloc(&mjpegEncCtrl.vids, mjpegEncCtrl.mjpsize);
+		if (mjpegEncCtrl.curBuffer == 0)
+			return -1;
+		if (type1 == 0)
+			mjpegEncCtrl.curLen = (50 * 1024); // mjpegEncCtrl.mjpsize;
+		else
+			mjpegEncCtrl.curLen = mjpegEncCtrl.mjpsize;
+		deg_Printf("the curBuffer:%x sizeof:%x\r\n", mjpegEncCtrl.curBuffer, mjpegEncCtrl.curBuffer + mjpegEncCtrl.curLen);
+		mjpegEncCtrl.photo_flag = 1;
+		mjpegEncCtrl.yuvFlag = 0;
+		mjpegEncCtrl.lastFrameLen = 0;
+		SysCtrl.photo_finish_flag = 1;
+		mjpegEncCtrl.photo_flag = 1;
+		ax32xx_mjpegEncodeBufferSet(mjpegEncCtrl.curBuffer, mjpegEncCtrl.curBuffer + mjpegEncCtrl.curLen);
+		if (type2)
+			ax32xx_csiISRRegiser(CSI_IRQ_JPG_FRAME_END, hal_mjpeg_manual_quad_on);
+		// ax32xx_csiISRRegiser(CSI_IRQ_JPG_FRAME_END,(void*)hal_mjpeg_manual_on);
+		if (!type1 && !type2)
+		{
+			ax32xx_csiISRRegiser(CSI_IRQ_JPG_FRAME_END, (void *)NULL);
+		}
+		ax32xx_csiISRRegiser(CSI_IRQ_SEN_STATE_INT, (void *)NULL);
+		ax32xx_csiISRRegiser(CSI_IRQ_VXY_FRAME_EN, NULL);
+		if (type1 == 0)
+		{
+			// ax32xx_mjpegEA_ncodeISRRegister(hal_mjpeg_manual_fdown);
+			ax32xx_mjpegEA_ncodeISRRegister(hal_mjpeg_manual_quad_fdown);
+		}
+		else
+		{
+			deg_Printf("gongbanbianmaliuchen\r\n");
+			ax32xx_mjpegEA_ncodeISRRegister(hal_mjpeg_manual_fdown_mini); // gongbande s
+		}
+
+		if (!type1 && !type2)
+		{
+			ax32xx_mjpeg_manual_on();
+			ax32xx_intEnable(IRQ_JPGA, 1); // enable jpegirq
+		}
+		else
+		{
+			ax32xx_csiOutputSet(CSI_OUTPUT_MJPGEN, 1);
+			ax32xx_csiEnable(1);
+		}
+		mjpegEncCtrl.drop = 0;
+	}
+
+	// debg("PRE_JPCON1:%x,%x\n",quality,(PRE_JPCON1 >> 23)&0x0f);
+	return 0;
+}
 /*******************************************************************************
 * Function Name  : imageEncodeStart
 * Description	 : take a photo
@@ -433,21 +602,40 @@ int imageEncodeStart(FHANDLE fileHanle, INT16U image_width, INT16U image_height,
 	void *buff; //,*tbuff;
 	s32 sync, sync_next;
 	u8 flag = 0, flag2;
+	u16 csi_w, csi_h;
 	u32 len;
 	u8 uCount = 0;
+	INT8U err;
+	JPEG_PHOTO_CACHE_T photo_cache;
 	// boardIoctrl(SysCtrl.bfd_led,IOCTRL_LED_NO0,0);
 
 	hal_mjpegEncodeResolutionImage(image_width, image_height);
 
 	if (hal_mjpegMemInit(1) < 0)
 	{
+		watermark_buf_bmp2yuv_free();
 		deg_Printf("image encode : memory malloc fail\n");
 		res = -1;
 		goto IMAGE_ENCODE_ERR;
 	}
+	// deg_Printf("SysCtrl.crop_level:%d mjpegEncCtrl.frame_enable:%d\r\n",SysCtrl.crop_level,mjpegEncCtrl.frame_enable);
 
-	hal_mjpegPhotoStart(image_width, image_height, image_q, 0 /*timestramp*/, frame_enable);
-
+#if CHANGE_4_3
+	// deg_Printf("--------4  :   3-----------------------\r\n");
+	hal_mjpegPhotoStart2(devSensorOp->pixelw, devSensorOp->pixelh, image_q, 0 /*timestramp*/, frame_enable, 1, 1); // didn't crop ,use orig
+#else
+	// if((SysCtrl.crop_level>0) && (frame_enable!=0))
+	if (SysCtrl.crop_level > 0)
+	{
+		// deg_Printf("gongbanbianma\r\n");
+		hal_mjpegPhotoStart(1280, devSensorOp->pixelh, image_q, 0 /*timestramp*/, frame_enable, 1, 1); // didn't crop ,use orig
+	}
+	else
+	{
+		// deg_Printf("yuanbenbianma\r\n");
+		hal_mjpegPhotoStart(image_width, image_height, image_q, 0 /*timestramp*/, frame_enable, 0, 1); // didn't crop ,use orig
+	}
+#endif
 	//==wait csi yuv buf ok==
 	timeout = XOSTimeGet();
 	while (1)
@@ -482,81 +670,232 @@ int imageEncodeStart(FHANDLE fileHanle, INT16U image_width, INT16U image_height,
 	// boardIoctrl(SysCtrl.bfd_led,IOCTRL_LED_NO0,1);
 
 	//==software handle yuv buf ==
-	hal_mjpeg_software_handle_csi_yuvbuf();
+#if CHANGE_4_3
+	// deg_Printf("datoutie  4:3\r\n");
+#else
+	if (0 == SysCtrl.crop_level)
+	{
+		hal_mjpeg_software_handle_csi_yuvbuf();
+		if (timestramp)
+		{
+			watermark_bmp2yuv_draw((u8 *)mjpegEncCtrl.ybuffer, WATERMAKE_SET_X_POS, WATERMAKE_SET_Y_POS, WATER_CHAR_GAP, CHANGE_4_3);
+			deg_Printf("add watermark finish \n");
+		}
+	}
+#if 0 // yuv
+	int fd1=open("txt.yuv", FA_CREATE_NEW | FA_WRITE | FA_READ);
+	write(fd1,(void *)mjpegEncCtrl.ybuffer,1280*devSensorOp->pixelh*3/2);	
+	close(fd1);
+	deg_Printf("=====txt.yuv====\n");
+	return 0;
+#endif
+#endif
 	//==end software handle yuv buf ==
-	if (timestramp)
-		watermark_bmp2yuv_draw((u8 *)mjpegEncCtrl.ybuffer, WATERMAKE_SET_X_POS, WATERMAKE_SET_Y_POS, WATER_CHAR_GAP);
 
 	//==wait jpg encode==
 	ax32xx_mjpeg_manual_on();
 	ax32xx_intEnable(IRQ_JPGA, 1); // enable jpegirq
-	timeout = XOSTimeGet();
-	allsize = 0;
 
-	while (1)
+	if (&mjpegEncCtrl.vids == NULL)
 	{
-		buff = hal_mjpegRawBufferGet(buff, &addr, &size, &sync, &sync_next); // hal_mjpegRawDataGet(&tbuff,&addr,&size);   // get jpeg frame addr & jpeg size.a total frame contains some of small buffers.here is the total size & start buffer addr
-		if (buff)
+		deg_Printf("no vids frame\r\n");
+	}
+	if (mjpegEncCtrl.curBuffer == NULL)
+		deg_Printf("no curBuffer frame\r\n");
+
+#if CHANGE_4_3
+	if (1)
+#else
+	// if(0!=SysCtrl.crop_level && mjpegEncCtrl.frame_enable==1)
+	if (0 != SysCtrl.crop_level)
+#endif
+	{
+		// deg_Printf("get buff\r\n");
+		timeout = XOSTimeGet();
+		while (1)
 		{
-			res = write(fileHanle, (void *)addr, (UINT)size);
-			if (res < 0)
+			buff = hal_mjpegRawBufferGet(buff, &addr, &size, &sync, &sync_next); // hal_mjpegRawDataGet(&tbuff,&addr,&size);   // get jpeg frame addr & jpeg size.a total frame contains some of small buffers.here is the total size & start buffer addr
+			if (buff)
 			{
-				deg_Printf("image encode : error\n");
+				// deg_Printf("buff:%x size:%d\r\n",buff,size);
 				break;
 			}
-			allsize += size;
-
-			hal_mjpegRawDataSet(buff);
-			res = 0;
-			flag2 = 1;
-			// break;
+			if (buff == NULL)
+			{
+				// deg_Printf("bobobob\r\n");
+			}
+			// deg_Printf("buff:%x size:%d\r\n",buff,size);
+			if ((timeout + 3000) < XOSTimeGet())
+			{
+				// deg_Printf("image encode : timeout 2-second.\n");
+				break;
+			}
 		}
-		else
-		{
 
-			if (SysCtrl.photo_finish_flag == 0 && flag)
+	} //==end wait jpg encode==
+	else
+	{
+		timeout = XOSTimeGet();
+		while (1)
+		{
+			photo_cache = *((JPEG_PHOTO_CACHE_T *)XMsgQPend(mjpegEncCtrl.photoCahQ, &err));
+
+			if ((timeout + 5000) < XOSTimeGet())
 			{
+				res = -3;
+				deg_Printf("5s timeout : error\n");
 				break;
 			}
-			else if (SysCtrl.photo_finish_flag == 0)
-			{
-				flag = 1;
-			}
-			else if (SysCtrl.photo_finish_flag == 2) // 异常处理
+			if (SysCtrl.photo_finish_flag == 2) // 异常处理
 			{
 				res = -2;
 				break;
 			}
-			else
+
+			if (err != X_ERR_NONE) // no buffe
+				continue;
+
+			if (fileHanle >= 0)
 			{
-				if (SysCtrl.photo_memory_flag && flag2)
+				res = write(fileHanle, (void *)photo_cache.mem, (UINT)photo_cache.len);
+
+				if (res < 0)
 				{
-					if (uCount < hal_mjpeg_get_num() - 1)
-					{
-						len = (uCount % 2) ? 50 * 1024 : 100 * 1024;
-						res = write(fileHanle, imageGetYuvAddr(uCount), len);
-						uCount++;
-						deg_Printf(" 2 the write: %x\n", res);
-					}
-					else if (imageGetYuvLen() && (uCount == hal_mjpeg_get_num() - 1))
-					{
-						// len = ((hal_mjpeg_get_num()-1)%2)?50*1024:100*1024;
-						res = write(fileHanle, imageGetYuvAddr(hal_mjpeg_get_num() - 1), imageGetYuvLen());
-						deg_Printf("..3..the write: %x\n", res);
-						break;
-					}
+					deg_Printf("image encode : error\n");
+					res = -1;
+					break;
 				}
 			}
-		}
+			if (photo_cache.flag)
+			{
+				res = 0;
+				deg_Printf("image ok \n");
+				break;
+			}
+			deg_Printf("the mem == 0x%x,the len == %d\n", photo_cache.mem, photo_cache.len);
 
-		if ((timeout + 3000) < XOSTimeGet())
-		{
-			deg_Printf("image encode : timeout 3-second.\n");
-			res = -3;
-			break;
+			if (photo_cache.mem >= mjpegEncCtrl.mjpbuf && photo_cache.mem <= mjpegEncCtrl.mjpbuf + mjpegEncCtrl.mjpsize)
+			{
+				hal_mjpegRawDataSet(photo_cache.mem);
+			}
+			else
+			{
+				hal_mjpeg_rev_buf_free(photo_cache.mem);
+			}
 		}
 	}
-	//==end wait jpg encode==
+
+//-----
+#if CHANGE_4_3
+	if (1)
+#else
+	// if(0!=SysCtrl.crop_level && mjpegEncCtrl.frame_enable==1)
+	if (0 != SysCtrl.crop_level)
+#endif
+	{
+		ax32xx_csiEnable(1);
+		dispLayerSetPIPMode(DISP_PIP_DISABLE);
+		XOSTimeDly(20);
+		u32 ticks = XOSTimeGet();
+		Image_ARG_T arg;
+#if CHANGE_4_3
+		arg.target.width = devSensorOp->pixelw;
+		arg.target.height = devSensorOp->pixelh;
+#else
+		arg.target.width = mjpegEncCtrl.csi_width;
+		arg.target.height = mjpegEncCtrl.csi_height;
+
+#endif
+		arg.yout = (u8 *)mjpegEncCtrl.ybuffer;
+		arg.uvout = (u8 *)mjpegEncCtrl.uvbuffer;
+		arg.media.type = MEDIA_SRC_RAM;
+		arg.media.src.buff = buff;
+		arg.wait = 1; // wait decode end
+		if (imageDecodeStart(&arg) < 0)
+		{
+			deg("jpg decode fail\n");
+		}
+		else
+		{
+			ticks = XOSTimeGet() - ticks;
+			u16 dec_width, dec_height;
+			imageDecodeGetResolution(&dec_width, &dec_height);
+		}
+		hal_csiEnable(1);
+		dispLayerSetPIPMode(SysCtrl.pip_mode);
+		hal_mjpeg_software_handle_csi_yuvbuf();
+		if (timestramp)
+		{
+			watermark_bmp2yuv_draw((u8 *)mjpegEncCtrl.ybuffer, WATERMAKE_SET_X_POS, WATERMAKE_SET_Y_POS, WATER_CHAR_GAP, CHANGE_4_3);
+			deg_Printf("add watermark finish \n");
+		}
+		hal_mjpegRawDataSet(buff);
+		// deg_Printf("aisghoiesegosa\r\n");
+	}
+//-----decode hal_mjpegPhotoStart
+
+//-----
+#if CHANGE_4_3
+	if (1)
+#else
+	// if(0!=SysCtrl.crop_level && mjpegEncCtrl.frame_enable==1)
+	if (0 != SysCtrl.crop_level)
+#endif
+	{
+		// deg_Printf("555555555555555555\r\n");
+		hal_mjpegPhotoStart2(image_width, image_height, image_q, 0 /*timestramp*/, frame_enable, 0, 0); // didn't crop ,use orig
+		timeout = XOSTimeGet();
+		while (1)
+		{
+			photo_cache = *((JPEG_PHOTO_CACHE_T *)XMsgQPend(mjpegEncCtrl.photoCahQ, &err));
+
+			if ((timeout + 5000) < XOSTimeGet())
+			{
+				res = -3;
+				deg_Printf("5s timeout : error\n");
+				break;
+			}
+			if (SysCtrl.photo_finish_flag == 2) // 异常处理
+			{
+				res = -2;
+				break;
+			}
+
+			if (err != X_ERR_NONE) // no buffe
+				continue;
+
+			if (fileHanle >= 0)
+			{
+				res = write(fileHanle, (void *)photo_cache.mem, (UINT)photo_cache.len);
+
+				if (res < 0)
+				{
+					deg_Printf("image encode : error\n");
+					res = -1;
+					break;
+				}
+			}
+			if (photo_cache.flag)
+			{
+				res = 0;
+				deg_Printf("image ok \n");
+				break;
+			}
+			deg_Printf("the mem == 0x%x,the len == %d\n", photo_cache.mem, photo_cache.len);
+
+			if (photo_cache.mem >= mjpegEncCtrl.mjpbuf && photo_cache.mem <= mjpegEncCtrl.mjpbuf + mjpegEncCtrl.mjpsize)
+			{
+				hal_mjpegRawDataSet(photo_cache.mem);
+			}
+			else
+			{
+				hal_mjpeg_rev_buf_free(photo_cache.mem);
+			}
+		}
+		//==end wait jpg encode==
+	}
+
+	//----- encode newphoto
 
 	//==lcd image active==
 	if (XOSTimeGet() > 200 + delaytime) // 200ms
@@ -583,9 +922,9 @@ IMAGE_ENCODE_ERR:
 	// boardIoctrl(SysCtrl.bfd_led,IOCTRL_LED_NO0,1);
 
 	hal_mjpegEncodeStop();
+	watermark_buf_bmp2yuv_free();
 	if (timestramp)
 		videoRecordImageWatermark(image_width, image_height, 0); // disable
-
 	return res;
 }
 

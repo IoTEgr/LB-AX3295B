@@ -291,7 +291,6 @@ TAKE_PHOTO_END:
 	else
 		return -1;
 }
-
 int image_take_photo_to_sdram()
 {
 	s32 res = 0;
@@ -326,34 +325,23 @@ int image_take_photo_to_sdram()
 		return 1;
 	}
 
-	if (SysCtrl.photo_mode_switch == 3) // ���
+	if (image_width <= 1280)
 	{
-		q_idx = 0;
+		q_idx = 7;
+	}
+	else if (image_width <= 2560)
+	{
+		q_idx = 6;
+	}
+	else if (image_width <= 3200)
+	{
+		q_idx = 5;
 	}
 	else
 	{
-
-		if (image_width <= 1280)
-		{
-			q_idx = 7;
-		}
-		else if (image_width <= 2560)
-		{
-			q_idx = 6;
-		}
-		else if (image_width <= 3200)
-		{
-			q_idx = 5;
-		}
-		else
-		{
-			q_idx = 4;
-		}
+		q_idx = 4;
 	}
-	yuv_rgb_table_init();
-	watermark_bmp2yuv_init(ST_PIXEL_W, ST_PIXEL_H, SM_PIC_ST_NUM);
-	hal_mjpegPhotoStart(image_width, image_height, jpg_encode_q_talbe[q_idx], 0 /*timestramp*/, frame_enable);
-
+	hal_mjpegPhotoStart(image_width, image_height, jpg_encode_q_talbe[q_idx], timestramp, frame_enable);
 	//==wait csi yuv buf ok==
 	timeout = XOSTimeGet();
 	while (1)
@@ -387,15 +375,13 @@ int image_take_photo_to_sdram()
 	//==end set lcd image stop==
 
 	boardIoctrl(SysCtrl.bfd_led, IOCTRL_LED_NO0, 1);
+
 	if (0 == res)
 	{
 		//==software handle yuv buf ==
 		hal_mjpeg_software_handle_csi_yuvbuf();
 		//==end software handle yuv buf ==
-		if (timestramp)
-		{
-			watermark_bmp2yuv_draw((u8 *)mjpegEncCtrl.ybuffer, WATERMAKE_SET_X_POS, WATERMAKE_SET_Y_POS, WATER_CHAR_GAP);
-		}
+
 		//==wait jpg encode==
 		ax32xx_mjpeg_manual_on();
 		ax32xx_intEnable(IRQ_JPGA, 1); // enable jpegirq
@@ -425,8 +411,7 @@ int image_take_photo_to_sdram()
 		}
 		//==end wait jpg encode==
 	}
-	watermark_buf_bmp2yuv_free();
-	yuv_rgb_table_uninit();
+
 	if (0 == res)
 	{
 		u32 jpg_addr;
@@ -475,9 +460,11 @@ int image_take_photo_to_sdram()
 
 	hal_mjpegEncodeStop();
 
+	if (timestramp)
+		videoRecordImageWatermark(image_width, image_height, 0); // disable
+
 	return res;
 }
-
 void photo_animation_effect(UserInterface name, uint8 flag)
 {
 	bool change_finir = false;

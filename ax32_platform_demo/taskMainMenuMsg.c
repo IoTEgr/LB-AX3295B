@@ -10,8 +10,8 @@ static u32 mainmenu_show_time;
 static u8 *mainmenu_bk_buf = NULL;
 static u16 bk_w, bk_h;
 
-static u32 mainmenu_jgp_id[MAINMENU_TASK_NUM] = {RES_MAIN_GAME_BK, RES_MAIN_MP3_BK, RES_MAIN_PLAYBACK_BK, RES_MAIN_PHOTO_BK, RES_MAIN_VIDEO_BK,
-												 RES_MAIN_SETTING_BK};
+static u32 mainmenu_jgp_id[MAINMENU_TASK_NUM] = {RES_MAIN_GAME_BK, RES_MAIN_MP3_BK, RES_MAIN_PLAYBACK_BK,
+												 RES_MAIN_PHOTO_BK, RES_MAIN_VIDEO_BK, RES_MAIN_SETTING_BK};
 
 static void mainMenu_showbuf(void)
 {
