@@ -1,14 +1,15 @@
-#include"uiWin.h"
+#include "uiWin.h"
 
 enum
 {
-	AUDIOPLAYER_ICON_ID=0,
+	AUDIOPLAYER_ICON_ID = 0,
 	AUDIOPLAYER_SD_ID,
 	AUDIOPLAYER_BATERRY_ID,
 
 	//==file list==
 	AUDIOPLAYER_LIST_BK_ID,
-	AUDIOPLAYER_LIST_TIPS_ID,
+	AUDIOPLAYER_LIST_TIPS1_ID,
+	AUDIOPLAYER_LIST_TIPS2_ID,
 	AUDIOPLAYER_LIST_ITEM1_ID,
 	AUDIOPLAYER_LIST_ITEM2_ID,
 	AUDIOPLAYER_LIST_ITEM3_ID,
@@ -23,36 +24,26 @@ enum
 	AUDIOPLAYER_LIST_STR6_ID,
 	AUDIOPLAYER_LIST_FILE_NUM_ID,
 
-	AUDIOPLAYER_VOL_ID,
-	
+	AUDIOPLAYER_VOLUME_NUM_ID,
+	AUDIOPLAYER_IMAGE_ID,
 	AUDIOPLAYER_STA_ID,
 	AUDIOPLAYER_PLAY_TIME_ID,
-
-	AUDIOPLAYBACK_PROGRESSBAR0,
-	AUDIOPLAYBACK_PROGRESSBAR1,
-	AUDIOPLAYBACK_PROGRESSBAR2,
-	AUDIOPLAYBACK_PROGRESSBAR3,
-	AUDIOPLAYBACK_PROGRESSBAR4,
-	AUDIOPLAYBACK_PROGRESSBAR5,
 	AUDIOPLAYER_MAX_ID
 };
 
-#define AUDIO_MP3_VOLUME		50	
+#define AUDIO_MP3_VOLUME 100
 
-#define AUDIOPLAYER_LIST_NUM		6
-#define AUDIOPLAYER_LIST_SHOW_TIME 	6
+#define AUDIOPLAYER_LIST_NUM 6
+#define AUDIOPLAYER_LIST_SHOW_TIME 6
 
-#define AUDIOPLAYER_LIST_FILE_MAX		512
-#define AUDIOPLAYER_NAME_LEN_MAX		128
-
-#define AUDIOPLAYER_DEC_CNT		32
-
-typedef struct AudioPlayerMp3NameList
+#define AUDIOPLAYER_DEC_CNT 32
+static u8 first_music = 0;
+/*typedef*/ struct AudioPlayerMp3NameList
 {
-	u8 name[AUDIOPLAYER_LIST_FILE_MAX][AUDIOPLAYER_NAME_LEN_MAX+1];
+	TCHAR name[AUDIOPLAYER_LIST_FILE_MAX][AUDIOPLAYER_NAME_LEN_MAX + 1];
 };
 
-typedef struct AudioPlayerList
+/*typedef*/ struct AudioPlayerList
 {
 	struct AudioPlayerMp3NameList *file_list;
 	s32 mp3_list;
@@ -66,204 +57,352 @@ typedef struct AudioPlayerList
 	u32 play_time;
 };
 
-static struct AudioPlayerList audio_player_list;
+// static struct AudioPlayerList audio_player_list;
+struct AudioPlayerList audio_player_list;
+struct AudioPlayerMp3NameList *nename;
 
-static u8 audio_player_mp3_num[]="000/000";
-static u8 audio_player_mp3_time[]="00:00";
-
-static winHandle audioPlayerProgressBar;
+static u8 audio_player_mp3_num[] = "000/000";
+static u8 audio_player_mp3_time[] = "00:00/00:00";
+static u8 audio_player_mp3_Volume[] = "0";
 
 static widgetCreateInfor audioPlayerWin[] =
-{
-	createFrameWin(Rx(0),Ry(0), Rw(320),Rh(240),R_COLOR_TRANSFER,WIN_ABS_POS),
+	{
+		createFrameWin(Rx(0), Ry(0), Rw(320), Rh(240), R_COLOR_TRANSFER, WIN_ABS_POS),
 
-	//createImageIcon(AUDIOPLAYER_ICON_ID,Rx(2), Ry(0), Rw(40), Rh(36), R_ID_ICON_MENUMUSIC,ALIGNMENT_LEFT),
-	createImageIcon(AUDIOPLAYER_SD_ID, Rx(40), Ry(0), Rw(32), Rh(32), R_ID_ICON_MTSDCNORMAL,ALIGNMENT_CENTER),
-	createStringIcon(AUDIOPLAYER_VOL_ID,Rx(130),Ry(0),Rw(48),Rh(32),strToResId("7"),ALIGNMENT_LEFT, R_COLOR_WHITE,0),
-	createImageIcon(AUDIOPLAYER_BATERRY_ID,Rx(280), Ry(0), Rw(32), Rh(32), R_ID_ICON_MTBATTERY3,ALIGNMENT_CENTER),
-	
-	createStringRim(AUDIOPLAYER_PLAY_TIME_ID,    Rx(10),       Ry(190), Rw(64), Rh(28),strToResId(audio_player_mp3_time),ALIGNMENT_CENTER, R_COLOR_WHITE,R_FONT_DEFAULT,R_COLOR_BLACK),
-	createStringRim(AUDIOPLAYER_LIST_FILE_NUM_ID,Rx(320-80-10),Ry(190), Rw(80), Rh(28),strToResId(audio_player_mp3_num),ALIGNMENT_CENTER, R_COLOR_WHITE,0,R_COLOR_BLACK),
+		// createImageIcon(AUDIOPLAYER_ICON_ID, Rx(2), Ry(0), Rw(33), Rh(32), R_ID_ICON_MENUMUSIC, ALIGNMENT_LEFT),
+		createImageIcon(AUDIOPLAYER_SD_ID, Rx(2 + 32), Ry(0), Rw(32), Rh(32), R_ID_ICON_MTSDCNORMAL, ALIGNMENT_CENTER),
+		createImageIcon(AUDIOPLAYER_BATERRY_ID, Rx(320 - 33), Ry(0), Rw(33), Rh(32), R_ID_ICON_MTBATTERY3, ALIGNMENT_CENTER),
 
-	//==end file list==
-	createImageIcon(AUDIOPLAYER_STA_ID,Rx(140), Ry(100), Rw(48), Rh(48), R_ID_ICON_MTPAUSE,ALIGNMENT_CENTER),
+		createStringIcon(AUDIOPLAYER_VOLUME_NUM_ID, Rx(130), Ry(0), Rw(48), Rh(32), strToResId("7"), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
+		createUniStrIcon(AUDIOPLAYER_LIST_TIPS1_ID, Rx(32), Ry(32), Rw(320 - 64), Rh(28), strToResId(" "), ALIGNMENT_CENTER, R_COLOR_YELLOW, 0),
+		createStringIcon(AUDIOPLAYER_LIST_TIPS2_ID, Rx(32), Ry(32), Rw(320 - 64), Rh(28), R_ID_STR_MUSICNAME, ALIGNMENT_CENTER, R_COLOR_YELLOW, 0),
+		createImageIcon(AUDIOPLAYER_IMAGE_ID, Rx(40), Ry(240 - 85 - 40), Rw(240), Rh(84), R_ID_ICON__MUSIC_1, ALIGNMENT_CENTER),
+//==file list==
+#if MP3_SHOW_MOVE
+		createUniStrIcon(AUDIOPLAYER_LIST_STR1_ID, Rx(32 + 8), Ry(35), Rw(240), Rh(25), strToResId(" "), ALIGNMENT_CENTER, R_COLOR_BLACK, 0),
+		createImageIcon(AUDIOPLAYER_IMAGE_ID, Rx(40), Ry(240 - 85 - 40), Rw(240), Rh(84), R_ID_ICON__MUSIC_1, ALIGNMENT_CENTER),
 
+#else
+		createRect(AUDIOPLAYER_LIST_BK_ID, Rx(32), Ry(58), Rw(320 - 64), Rh(240 - 96), R_COLOR_TBLACK),
+		createRect(AUDIOPLAYER_LIST_ITEM1_ID, Rx(32), Ry(58), Rw(320 - 64), Rh(24), R_COLOR_TBLACK),
+		createRect(AUDIOPLAYER_LIST_ITEM2_ID, Rx(32), Ry(82), Rw(320 - 64), Rh(24), R_COLOR_TBLACK),
+		createRect(AUDIOPLAYER_LIST_ITEM3_ID, Rx(32), Ry(106), Rw(320 - 64), Rh(24), R_COLOR_TBLACK),
+		createRect(AUDIOPLAYER_LIST_ITEM4_ID, Rx(32), Ry(130), Rw(320 - 64), Rh(24), R_COLOR_TBLACK),
+		createRect(AUDIOPLAYER_LIST_ITEM5_ID, Rx(32), Ry(154), Rw(320 - 64), Rh(24), R_COLOR_TBLACK),
+		createRect(AUDIOPLAYER_LIST_ITEM6_ID, Rx(32), Ry(178), Rw(320 - 64), Rh(24), R_COLOR_TBLACK),
+		createUniStrIcon(AUDIOPLAYER_LIST_STR1_ID, Rx(32 + 8), Ry(60), Rw(320 - 64 - 8), Rh(20), strToResId(" "), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
+		createUniStrIcon(AUDIOPLAYER_LIST_STR2_ID, Rx(32 + 8), Ry(84), Rw(320 - 64 - 8), Rh(20), strToResId(" "), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
+		createUniStrIcon(AUDIOPLAYER_LIST_STR3_ID, Rx(32 + 8), Ry(108), Rw(320 - 64 - 8), Rh(20), strToResId(" "), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
+		createUniStrIcon(AUDIOPLAYER_LIST_STR4_ID, Rx(32 + 8), Ry(132), Rw(320 - 64 - 8), Rh(20), strToResId(" "), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
+		createUniStrIcon(AUDIOPLAYER_LIST_STR5_ID, Rx(32 + 8), Ry(156), Rw(320 - 64 - 8), Rh(20), strToResId(" "), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
+		createUniStrIcon(AUDIOPLAYER_LIST_STR6_ID, Rx(32 + 8), Ry(180), Rw(320 - 64 - 8), Rh(20), strToResId(" "), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
 
-	//createFrameWin(Rx(38),Ry(180), Rw(10),Rh(100),R_COLOR_RED,WIN_ABS_POS),
+#endif
+		createStringIcon(AUDIOPLAYER_LIST_FILE_NUM_ID, Rx(32), Ry(240 - 32), Rw(70), Rh(28), strToResId(audio_player_mp3_num), ALIGNMENT_CENTER, R_COLOR_BLACK, 0),
 
-	createRect(AUDIOPLAYBACK_PROGRESSBAR0, Rx(38), Ry(80), Rw(10),Rh(100),R_COLOR_RED),
-	createRect(AUDIOPLAYBACK_PROGRESSBAR1, Rx(58), Ry(80), Rw(10),Rh(100),R_COLOR_RED),
-	createRect(AUDIOPLAYBACK_PROGRESSBAR2, Rx(78), Ry(80), Rw(10),Rh(100),R_COLOR_RED),
-	createRect(AUDIOPLAYBACK_PROGRESSBAR3, Rx(98), Ry(80), Rw(10),Rh(100),R_COLOR_RED),
-	createRect(AUDIOPLAYBACK_PROGRESSBAR4, Rx(118),Ry(80), Rw(10),Rh(100),R_COLOR_RED),
-	createRect(AUDIOPLAYBACK_PROGRESSBAR5, Rx(138), Ry(80), Rw(10),Rh(100),R_COLOR_RED),
-	
-	widgetEnd(),
+		//==end file list==
+		createImageIcon(AUDIOPLAYER_STA_ID, Rx(2), Ry(240 - 32), Rw(32), Rh(32), R_ID_ICON_MENUMUSICPLAY, ALIGNMENT_CENTER),
+		createStringIcon(AUDIOPLAYER_PLAY_TIME_ID, Rx(320 - 120), Ry(240 - 37), Rw(120), Rh(32), strToResId(audio_player_mp3_time), ALIGNMENT_CENTER, R_COLOR_BLACK, 0), // R_COLOR_BLACK
+
+		widgetEnd(),
 };
 
-
 static void audioPlayerSDShow(winHandle handle)
-{
-	if(SysCtrl.sdcard == SDC_STAT_NORMAL)
-		winSetResid(winItem(handle,AUDIOPLAYER_SD_ID),R_ID_ICON_MTSDCNORMAL);
-	else if(SysCtrl.sdcard == SDC_STAT_NULL)
-		winSetResid(winItem(handle,AUDIOPLAYER_SD_ID),R_ID_ICON_MTSDCNULL);
-	else
-		winSetResid(winItem(handle,AUDIOPLAYER_SD_ID),R_ID_ICON_MTSDCNORMAL);
-}
+{
 
+	if (SysCtrl.sdcard == SDC_STAT_NORMAL)
+		winSetResid(winItem(handle, AUDIOPLAYER_SD_ID), R_ID_ICON_MTSDCNORMAL);
+	else if (SysCtrl.sdcard == SDC_STAT_NULL)
+		winSetResid(winItem(handle, AUDIOPLAYER_SD_ID), R_ID_ICON_MTSDCNULL);
+	else
+		winSetResid(winItem(handle, AUDIOPLAYER_SD_ID), R_ID_ICON_MTSDCNORMAL);
+}
 
 static void audioPlayerBaterryShow(winHandle handle)
-{
-	//deg_Printf("*************SysCtrl.battery %d  ***\n",SysCtrl.battery);
-	if(SysCtrl.usb != USB_STAT_NULL)
+{
+
+	// deg_Printf("*************SysCtrl.battery %d  ***\n",SysCtrl.battery);
+	if (SysCtrl.usb != USB_STAT_NULL)
 	{
-		if( hal_gpioRead(CHECK_FULL_CH,CHECK_FULL_PIN))
+		SysCtrl.bat_charge_idx++;
+		if (SysCtrl.bat_charge_idx > 3)
 		{
-			winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY4);
-			//boardIoctrl(SysCtrl.bfd_led,IOCTRL_LED_B,1);
+			SysCtrl.bat_charge_idx = 0;
 		}
-		else
-		{
-			winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY5);
-		}
+		winSetResid(winItem(handle, AUDIOPLAYER_BATERRY_ID), R_ID_ICON_MTBATTERY1 + SysCtrl.bat_charge_idx);
 	}
-	else if(SysCtrl.battery == BATTERY_STAT_4)
-		winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY4);
-	else if(SysCtrl.battery == BATTERY_STAT_3)
-		winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY3);
-	else if(SysCtrl.battery == BATTERY_STAT_2)
-		winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY2);
-	else if(SysCtrl.battery == BATTERY_STAT_1)
-		winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY1);
-	else if(SysCtrl.battery == BATTERY_STAT_0)
-		winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY0);
+	else if (SysCtrl.battery == BATTERY_STAT_4)
+		winSetResid(winItem(handle, AUDIOPLAYER_BATERRY_ID), R_ID_ICON_MTBATTERY4);
+	else if (SysCtrl.battery == BATTERY_STAT_3)
+		winSetResid(winItem(handle, AUDIOPLAYER_BATERRY_ID), R_ID_ICON_MTBATTERY3);
+	else if (SysCtrl.battery == BATTERY_STAT_2)
+		winSetResid(winItem(handle, AUDIOPLAYER_BATERRY_ID), R_ID_ICON_MTBATTERY2);
+	else if (SysCtrl.battery == BATTERY_STAT_1)
+		winSetResid(winItem(handle, AUDIOPLAYER_BATERRY_ID), R_ID_ICON_MTBATTERY1);
+	else if (SysCtrl.battery == BATTERY_STAT_0)
+		winSetResid(winItem(handle, AUDIOPLAYER_BATERRY_ID), R_ID_ICON_MTBATTERY0);
 	else
-		winSetResid(winItem(handle,AUDIOPLAYER_BATERRY_ID),R_ID_ICON_MTBATTERY4);
-	winSetVisible(winItem(handle,AUDIOPLAYER_BATERRY_ID),true);
+		winSetResid(winItem(handle, AUDIOPLAYER_BATERRY_ID), R_ID_ICON_MTBATTERY4);
+	winSetVisible(winItem(handle, AUDIOPLAYER_BATERRY_ID), true);
+}
+static void audioPlayerVolumeShow(winHandle handle, u8 playing)
+{
+	audio_player_mp3_Volume[0] = SysCtrl.volume_level + '0';
+
+	deg_Printf("SysCtrl.volume_level=%d char[%s]\n", SysCtrl.volume_level, audio_player_mp3_Volume);
+	if (playing)
+	{
+		winSetResid(winItem(handle, AUDIOPLAYER_VOLUME_NUM_ID), strToResId(audio_player_mp3_Volume));
+		winSetVisible(winItem(handle, AUDIOPLAYER_VOLUME_NUM_ID), true);
+	}
+	else
+		winSetVisible(winItem(handle, AUDIOPLAYER_VOLUME_NUM_ID), false);
 }
 
-static void audioPlayerStaShow(winHandle handle,u8 playing)
-{
-/*	if(playing)
-		winSetResid(winItem(handle,AUDIOPLAYER_STA_ID),R_ID_ICON_MENUMUSICPAUSE);
+static void audioPlayerStaShow(winHandle handle, u8 playing)
+{
+
+	if (playing)
+		winSetResid(winItem(handle, AUDIOPLAYER_STA_ID), R_ID_ICON_MENUMUSICPAUSE);
 	else
-		winSetResid(winItem(handle,AUDIOPLAYER_STA_ID),R_ID_ICON_MENUMUSICPLAY);*/
+		winSetResid(winItem(handle, AUDIOPLAYER_STA_ID), R_ID_ICON_MENUMUSICPLAY);
 }
 
+static int audioPlayerMsgfile(winHandle handle, uint32 parameNum, uint32 *parame)
+{
+	uiOpenWindow(&tips1Window, 2, R_ID_STR_TIPS_NO_FILES, SDC_NULL_TIMEOUT);
+	return 0;
+}
+
+extern uint32 mp3_flie_playtime(void);
 static void audioPlayerTimeShow(winHandle handle)
-{
+{
 
-	u16 min,sec;
-	audio_player_list.play_time = (mp3_flie_playtime()+600)/1000;
-	if(audio_player_list.play_time>audio_player_list.total_time)
+	u16 min, sec;
+	if (audio_player_list.list_num > 0)
 	{
-		audio_player_list.play_time=audio_player_list.total_time;
+		audio_player_list.play_time = (mp3_flie_playtime() + 600) / 1000;
+		if (audio_player_list.play_time > audio_player_list.total_time)
+		{
+			audio_player_list.play_time = audio_player_list.total_time;
+		}
+
+		min = audio_player_list.play_time / 60;
+		sec = audio_player_list.play_time % 60;
+
+		audio_player_mp3_time[0] = ((min / 10) % 10) + '0';
+		audio_player_mp3_time[1] = (min % 10) + '0';
+		audio_player_mp3_time[3] = ((sec / 10) % 10) + '0';
+		audio_player_mp3_time[4] = (sec % 10) + '0';
+
+		min = audio_player_list.total_time / 60;
+		sec = audio_player_list.total_time % 60;
+		audio_player_mp3_time[6] = ((min / 10) % 10) + '0';
+		audio_player_mp3_time[7] = (min % 10) + '0';
+		audio_player_mp3_time[9] = ((sec / 10) % 10) + '0';
+		audio_player_mp3_time[10] = (sec % 10) + '0';
 	}
+	else
+	{
 
-	min=audio_player_list.play_time/60;
-	sec=audio_player_list.play_time%60;
-	
-	audio_player_mp3_time[0]=((min/10)%10)+'0';
-	audio_player_mp3_time[1]=(min%10)+'0';
-	audio_player_mp3_time[3]=((sec/10)%10)+'0';
-	audio_player_mp3_time[4]=(sec%10)+'0';
+		audio_player_mp3_time[0] = 0 + '0';
+		audio_player_mp3_time[1] = 0 + '0';
+		audio_player_mp3_time[3] = 0 + '0';
+		audio_player_mp3_time[4] = 0 + '0';
 
-	audio_player_mp3_time[5]=0;
-
-#if 0
-	min=audio_player_list.total_time/60;
-	sec=audio_player_list.total_time%60;
-	audio_player_mp3_time[6]=((min/10)%10)+'0';
-	audio_player_mp3_time[7]=(min%10)+'0';
-	audio_player_mp3_time[9]=((sec/10)%10)+'0';
-	audio_player_mp3_time[10]=(sec%10)+'0';
-#endif
-	winSetResid(winItem(handle,AUDIOPLAYER_PLAY_TIME_ID),strToResId(audio_player_mp3_time));
-
-	winSetPorgressRate(audioPlayerProgressBar, audio_player_list.play_time*100/audio_player_list.total_time);
-
+		audio_player_mp3_time[6] = 0 + '0';
+		audio_player_mp3_time[7] = 0 + '0';
+		audio_player_mp3_time[9] = 0 + '0';
+		audio_player_mp3_time[10] = 0 + '0';
+	}
+	winSetResid(winItem(handle, AUDIOPLAYER_PLAY_TIME_ID), strToResId(audio_player_mp3_time));
 }
 
 static void audioPlayerFileListShow(winHandle handle)
 {
-	u8 i;
-	
-	if(audio_player_list.list_show_en)
+#if MP3_SHOW_MOVE
+	if (audio_player_list.list_num > 0)
+		winSetResid(winItem(handle, AUDIOPLAYER_LIST_STR1_ID), strToResId(nename->name[audio_player_list.list_idx]));
+	else
 	{
-		for(i=0;i<AUDIOPLAYER_LIST_NUM;i++)
-		{
-			winSetfgColor(winItem(handle,AUDIOPLAYER_LIST_ITEM1_ID+i),R_COLOR_BLACK);
-			winSetVisible(winItem(handle,AUDIOPLAYER_LIST_ITEM1_ID+i),true);
-			winSetVisible(winItem(handle,AUDIOPLAYER_LIST_STR1_ID+i),true);
-			if(audio_player_list.list_idx>=(AUDIOPLAYER_LIST_NUM-1))
-			{
-				winSetResid(winItem(handle,AUDIOPLAYER_LIST_STR1_ID+i),strToResId(audio_player_list.file_list->name[audio_player_list.list_idx-(AUDIOPLAYER_LIST_NUM-1)+i]));
-			}
-			else
-			{
-				winSetResid(winItem(handle,AUDIOPLAYER_LIST_STR1_ID+i),strToResId(audio_player_list.file_list->name[i]));
-			}
-		}
-
-		if(audio_player_list.list_idx>=(AUDIOPLAYER_LIST_NUM-1))
-		{
-			winSetfgColor(winItem(handle,AUDIOPLAYER_LIST_ITEM1_ID+AUDIOPLAYER_LIST_NUM-1),R_COLOR_BLUE2);
-		}
-		else
-		{
-			winSetfgColor(winItem(handle,AUDIOPLAYER_LIST_ITEM1_ID+audio_player_list.list_idx),R_COLOR_BLUE2);
-		}
-		
-		winSetVisible(winItem(handle,AUDIOPLAYER_LIST_BK_ID),true);
-		winSetVisible(winItem(handle,AUDIOPLAYER_LIST_TIPS_ID),true);
-
-		//==set file num str==
-		if(audio_player_list.list_num>0)
-		{
-			u16 sel=audio_player_list.list_idx+1;
-			audio_player_mp3_num[0]=((sel/100)%10)+'0';
-			audio_player_mp3_num[1]=((sel/10)%10)+'0';
-			audio_player_mp3_num[2]=sel%10+'0';
-			audio_player_mp3_num[4]=((audio_player_list.list_num/100)%10)+'0';
-			audio_player_mp3_num[5]=((audio_player_list.list_num/10)%10)+'0';
-			audio_player_mp3_num[6]=audio_player_list.list_num%10+'0';
-			winSetResid(winItem(handle,AUDIOPLAYER_LIST_FILE_NUM_ID),strToResId(audio_player_mp3_num));
-		}
-		else
-		{
-			strcpy(audio_player_mp3_num,"000/000");
-		}
-		winSetVisible(winItem(handle,AUDIOPLAYER_LIST_FILE_NUM_ID),true);
-
-		winSetVisible(winItem(handle,AUDIOPLAYER_PLAY_TIME_ID),true);
-		winSetVisible(audioPlayerProgressBar, true);
-		
+		static const TCHAR noMp3File[] = {'n', 'o', ' ', 'm', 'p', '3', ' ', 'f', 'i', 'l', 'e', 0};
+		winSetResid(winItem(handle, AUDIOPLAYER_LIST_STR1_ID), strToResId(noMp3File));
+	}
+	//==set file num str==
+	if (audio_player_list.list_num > 0)
+	{
+		u16 sel = audio_player_list.list_idx + 1;
+		audio_player_mp3_num[0] = ((sel / 100) % 10) + '0';
+		audio_player_mp3_num[1] = ((sel / 10) % 10) + '0';
+		audio_player_mp3_num[2] = sel % 10 + '0';
+		audio_player_mp3_num[4] = ((audio_player_list.list_num / 100) % 10) + '0';
+		audio_player_mp3_num[5] = ((audio_player_list.list_num / 10) % 10) + '0';
+		audio_player_mp3_num[6] = audio_player_list.list_num % 10 + '0';
+		winSetResid(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), strToResId(audio_player_mp3_num));
 	}
 	else
 	{
-		for(i=0;i<AUDIOPLAYER_LIST_NUM;i++)
+		strcpy((char *)audio_player_mp3_num, "000/000");
+	}
+	winSetVisible(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), true);
+#else
+	u8 i;
+	if (audio_player_list.list_show_en)
+	{
+		if (audio_player_list.list_idx == 0)
 		{
-			winSetVisible(winItem(handle,AUDIOPLAYER_LIST_ITEM1_ID+i),false);
-			winSetVisible(winItem(handle,AUDIOPLAYER_LIST_STR1_ID+i),false);
+			first_music = 0;
+			for (i = 0; i < AUDIOPLAYER_LIST_NUM; i++)
+			{
+				winSetResid(winItem(handle, AUDIOPLAYER_LIST_STR1_ID + i), strToResId(nename->name[i]));
+				if (i == 0)
+					winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID), R_COLOR_BLUE2);
+				else
+					winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), R_COLOR_TBLACK);
+			}
 		}
-		winSetVisible(winItem(handle,AUDIOPLAYER_LIST_BK_ID),false);
-		winSetVisible(winItem(handle,AUDIOPLAYER_LIST_TIPS_ID),false);
-		winSetVisible(winItem(handle,AUDIOPLAYER_LIST_FILE_NUM_ID),false);
+		else if (audio_player_list.list_idx == audio_player_list.list_num - 1)
+		{
+			first_music = audio_player_list.list_num - AUDIOPLAYER_LIST_NUM;
+			for (i = 0; i < AUDIOPLAYER_LIST_NUM; i++)
+			{
+				winSetResid(winItem(handle, AUDIOPLAYER_LIST_STR1_ID + i), strToResId(nename->name[audio_player_list.list_num - AUDIOPLAYER_LIST_NUM + i]));
+				if (i == AUDIOPLAYER_LIST_NUM - 1)
+					winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + AUDIOPLAYER_LIST_NUM - 1), R_COLOR_BLUE2);
+				else
+					winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), R_COLOR_TBLACK);
+			}
+		}
+		else
+		{
+			if (audio_player_list.list_idx <= first_music + AUDIOPLAYER_LIST_NUM - 1 && audio_player_list.list_idx >= first_music)
+			{
+				winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + audio_player_list.list_idx - first_music), R_COLOR_BLUE2);
+				for (i = 0; i < AUDIOPLAYER_LIST_NUM; i++)
+				{
+					if (i != audio_player_list.list_idx - first_music)
+					{
+						winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), R_COLOR_TBLACK);
+					}
+				}
+			}
+			else
+			{
+				if (audio_player_list.list_idx > first_music + AUDIOPLAYER_LIST_NUM - 1)
+					first_music += 1;
+				else
+					first_music -= 1;
+				for (i = 0; i < AUDIOPLAYER_LIST_NUM; i++)
+				{
+					winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), R_COLOR_TBLACK);
+					winSetVisible(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), true);
+					winSetVisible(winItem(handle, AUDIOPLAYER_LIST_STR1_ID + i), true);
+					winSetResid(winItem(handle, AUDIOPLAYER_LIST_STR1_ID + i), strToResId(nename->name[first_music + i]));
+					if (i != audio_player_list.list_idx - first_music)
+					{
+						winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), R_COLOR_TBLACK);
+					}
+					else
+					{
+						winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), R_COLOR_BLUE2);
+					}
+				}
+			}
+		}
+		winSetVisible(winItem(handle, AUDIOPLAYER_LIST_BK_ID), true);
+		// winSetVisible(winItem(handle, AUDIOPLAYER_LIST_TIPS1_ID), true);
 
-		
-		winSetVisible(winItem(handle,AUDIOPLAYER_PLAY_TIME_ID),false);
-		winSetVisible(audioPlayerProgressBar, false);
+		//==set file num str==
+		if (audio_player_list.list_num > 0)
+		{
+			u16 sel = audio_player_list.list_idx + 1;
+			audio_player_mp3_num[0] = ((sel / 100) % 10) + '0';
+			audio_player_mp3_num[1] = ((sel / 10) % 10) + '0';
+			audio_player_mp3_num[2] = sel % 10 + '0';
+			audio_player_mp3_num[4] = ((audio_player_list.list_num / 100) % 10) + '0';
+			audio_player_mp3_num[5] = ((audio_player_list.list_num / 10) % 10) + '0';
+			audio_player_mp3_num[6] = audio_player_list.list_num % 10 + '0';
+		}
+		else
+		{
+			strcpy((char *)audio_player_mp3_num, "000/000");
+		}
+		winSetResid(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), strToResId(audio_player_mp3_num));
+		winSetVisible(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), true);
+	}
+	else
+	{
+		for (i = 0; i < AUDIOPLAYER_LIST_NUM; i++)
+		{
+			winSetVisible(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), false);
+			winSetVisible(winItem(handle, AUDIOPLAYER_LIST_STR1_ID + i), false);
+		}
+		winSetVisible(winItem(handle, AUDIOPLAYER_LIST_BK_ID), false);
+		winSetVisible(winItem(handle, AUDIOPLAYER_LIST_TIPS1_ID), true);
+		winSetVisible(winItem(handle, AUDIOPLAYER_LIST_TIPS2_ID), false);
+		winSetVisible(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), false);
+
+		if (audio_player_list.list_num > 0)
+			winSetResid(winItem(handle, AUDIOPLAYER_LIST_STR1_ID), strToResId(nename->name[audio_player_list.list_idx]));
+		else
+		{
+			static const TCHAR noMp3File[] = {'n', 'o', ' ', 'm', 'p', '3', ' ', 'f', 'i', 'l', 'e', 0};
+			winSetResid(winItem(handle, AUDIOPLAYER_LIST_STR1_ID), strToResId(noMp3File));
+		}
+		//==set file num str==
+		if (audio_player_list.list_num > 0)
+		{
+			u16 sel = audio_player_list.list_idx + 1;
+			audio_player_mp3_num[0] = ((sel / 100) % 10) + '0';
+			audio_player_mp3_num[1] = ((sel / 10) % 10) + '0';
+			audio_player_mp3_num[2] = sel % 10 + '0';
+			audio_player_mp3_num[4] = ((audio_player_list.list_num / 100) % 10) + '0';
+			audio_player_mp3_num[5] = ((audio_player_list.list_num / 10) % 10) + '0';
+			audio_player_mp3_num[6] = audio_player_list.list_num % 10 + '0';
+			winSetResid(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), strToResId(audio_player_mp3_num));
+		}
+		else
+		{
+			strcpy((char *)audio_player_mp3_num, "000/000");
+		}
+		winSetVisible(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), true);
+
+		// for (i = 0; i < AUDIOPLAYER_LIST_NUM; i++)
+		// {
+		// 	winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), R_COLOR_BLACK);
+		// 	winSetVisible(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), true);
+		// 	winSetVisible(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID + i), false);
+		// 	winSetVisible(winItem(handle, AUDIOPLAYER_LIST_STR1_ID + i), false);
+		// }
+
+		// winSetfgColor(winItem(handle, AUDIOPLAYER_LIST_ITEM1_ID), R_COLOR_BLUE2);
+
+		// winSetVisible(winItem(handle, AUDIOPLAYER_LIST_BK_ID), true);
+		// winSetVisible(winItem(handle, AUDIOPLAYER_LIST_TIPS1_ID), true);
+
+		// //==set file num str==
+		// strcpy((char *)audio_player_mp3_num, "000/000");
+		// winSetResid(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), strToResId(audio_player_mp3_num));
+		// winSetVisible(winItem(handle, AUDIOPLAYER_LIST_FILE_NUM_ID), true);
+	}
+#endif
+}
+
+static u8 imgidx = 0;
+static u32 mp3imageIndex[] =
+	{
+		R_ID_ICON__MUSIC_1,
+		R_ID_ICON__MUSIC_2,
+		R_ID_ICON__MUSIC_3,
+};
+
+static void audioPlayerFileBkShow(winHandle handle)
+{
+	imgidx = rand() % 3;
+	if (imgidx > 2)
+	{
+		imgidx = 0;
 	}
 
+	winSetResid(winItem(handle, AUDIOPLAYER_IMAGE_ID), mp3imageIndex[imgidx]);
 }
-
-static char audio_player_mp3_vol[2];
-static void audioPlayerVolShow(winHandle handle,uint8 vol)
-{
-	audio_player_mp3_vol[0]= vol+ '0';
-	audio_player_mp3_vol[1]= 0;
-	winSetResid(winItem(handle,AUDIOPLAYER_VOL_ID),strToResId(audio_player_mp3_vol));
-}
-
-

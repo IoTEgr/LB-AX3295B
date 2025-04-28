@@ -15,6 +15,7 @@ extern sysTask taskVideoRecorde;
  *******************************************************************************/
 int video_record_callback(INT32U channel, INT32U cmd, INT32U para)
 {
+	TCHAR fname1[64], fname2[64];
 	// static INT8U chBfileFlag = 0; //channel B created file flag,for lock file using
 	char *name;
 	FHANDLE *fdt;
@@ -54,8 +55,8 @@ int video_record_callback(INT32U channel, INT32U cmd, INT32U para)
 			if ((SysCtrl.bfolder == 0) && (SysCtrl.usensor != USENSOR_STAT_NULL))
 			{
 				strcpy(tempFileName1, FILEDIR_VIDEOB);
-				tempFileName1[strlen(tempFileName1) - 1] = 0;
-				f_mkdir((const TCHAR *)tempFileName1); // FILEDIR_VIDEO);
+				Ascii2Tchar(tempFileName1, fname1, sizeof(fname1) / sizeof(fname1[0]));
+				f_mkdir(fname1); // FILEDIR_VIDEO);
 				SysCtrl.bfolder = 1;
 				deg_Printf("video : create folder %s\n", tempFileName1);
 				tempFileName1[0] = 0;
@@ -75,7 +76,8 @@ int video_record_callback(INT32U channel, INT32U cmd, INT32U para)
 					name = manangerFindFileAndDel(SysCtrl.avi_list, &index, MA_FILE_AVIB);
 				if (name)
 				{
-					fd[0] = open(name, FA_WRITE | FA_READ);
+					Ascii2Tchar(name, fname1, sizeof(fname1) / sizeof(fname1[0]));
+					fd[0] = open(/*name*/ fname1, FA_WRITE | FA_READ);
 					if (fd[0] >= 0)
 					{
 						strcpy(tempFileName2, name);
@@ -118,18 +120,19 @@ int video_record_callback(INT32U channel, INT32U cmd, INT32U para)
 			}
 			strcpy(tempFileName1, name);
 		}
-
+		Ascii2Tchar(tempFileName1, fname1, sizeof(fname1) / sizeof(fname1[0]));
+		Ascii2Tchar(tempFileName2, fname2, sizeof(fname2) / sizeof(fname2[0]));
 		if (fd[0] < 0)
 		{
-			fd[0] = open(tempFileName1, FA_CREATE_ALWAYS | FA_WRITE | FA_READ); // FA_CREATE_NEW
+			fd[0] = open(/*tempFileName1*/ fname1, FA_CREATE_ALWAYS | FA_WRITE | FA_READ); // FA_CREATE_NEW
 			bsize = 0;
 		}
 		else
 		{
 			bsize = fs_size(fd[0]);
 			close(fd[0]);
-			f_rename(tempFileName2, tempFileName1); // must close before rename
-			fd[0] = open(tempFileName1, FA_WRITE | FA_READ);
+			f_rename(fname2, fname1); // must close before rename
+			fd[0] = open(/*tempFileName1*/ fname1, FA_WRITE | FA_READ);
 			// f_rename(tempFileName2,tempFileName1);
 			deg_Printf("using old file:%s.%d b\n", tempFileName2, bsize);
 			// sysLog("using old file.");
@@ -306,7 +309,9 @@ int video_record_callback(INT32U channel, INT32U cmd, INT32U para)
 				memcpy(tempFileName1, FILEDIR_VIDEOB, strlen(FILEDIR_VIDEOB));
 			}
 
-			f_rename(tempFileName2, tempFileName1); // rename in file system
+			Ascii2Tchar(tempFileName1, fname1, sizeof(fname1) / sizeof(fname1[0]));
+			Ascii2Tchar(tempFileName2, fname2, sizeof(fname2) / sizeof(fname2[0]));
+			f_rename(fname2, fname1); // rename in file system
 			// deg_Printf("video : rename  .%s->%s\n",tempFileName2,tempFileName1);
 			deg_Printf("video : lock this file.\n");
 		}
@@ -440,7 +445,8 @@ VIDEO_RECORD_ERROR_HANDLE:
 	{
 		memcpy(tempFileName1, FILEDIR_VIDEOB, strlen(FILEDIR_VIDEOB));
 	}
-	f_unlink(tempFileName1);
+	Ascii2Tchar(tempFileName1, fname1, sizeof(fname1) / sizeof(fname1[0]));
+	f_unlink(/*tempFileName1*/ fname1);
 #if AVI_TYPE_ODML == 0
 	if (channel == VIDEO_CH_A)
 		f_unlink("VIDEOA.TMP");
@@ -520,24 +526,26 @@ char *photoname = NULL;
 void videoCapturePhoto(void)
 {
 	/*
-		if((task_video_Get_Status() == MEDIA_STAT_START)&&(photoFd<0))
+			if((task_video_Get_Status() == MEDIA_STAT_START)&&(photoFd<0))
+	{
+		photoFd = task_image_createfile(0,&photoname);
+		if(photoFd>=0)
 		{
-			photoFd = task_image_createfile(0,&photoname);
-			if(photoFd>=0)
+			if(videoRecordTakePhoto(photoFd)<0)
 			{
-				if(videoRecordTakePhoto(photoFd)<0)
-				{
-					close(photoFd);
-					f_unlink(photoname);
-					photoFd = -1;
-					deg_Printf("recorder : tabke photo fail\n");
-				}
-				else
-					deg_Printf("recorder : tabke photo start\n");
+				TCHAR fname[64];
+				Ascii2Tchar(photoname, fname, sizeof(fname)/sizeof(fname[0]));
+				close(photoFd);
+				f_unlink(fname);
+				photoFd = -1;
+				deg_Printf("recorder : tabke photo fail\n");
 			}
-			else if (photoFd == -2)
-				videoRecordTakePhoto(photoFd);
+			else
+				deg_Printf("recorder : tabke photo start\n");
 		}
+		else if (photoFd == -2)
+			videoRecordTakePhoto(photoFd);
+	}
 	*/
 }
 
@@ -691,9 +699,11 @@ void taskVideoRecordeClose(uint32 arg)
 		}
 		else
 		{
+			TCHAR fname[64];
+			Ascii2Tchar(photoname, fname, sizeof(fname) / sizeof(fname[0]));
 			deg_Printf("recorder : take photo unfinish.delete file:%s\n", photoname);
 			close(photoFd);
-			f_unlink(photoname);
+			f_unlink(/*photoname*/ fname);
 		}
 	}
 #if FILE_SYNC_DELETE > 0

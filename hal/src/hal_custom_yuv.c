@@ -1,31 +1,30 @@
 
 /****************************************************************************
 **
- **                         BUILDWIN HAL LAYER
-  ** *   **                     THE APPOTECH HAL
-   **** **                         CSI HAL LAYER DRIVER
-  *** ***
- **  * **               (C) COPYRIGHT 2016 BUILDWIN 
-**      **                         
-         **         BuildWin SZ LTD.CO  ; VIDEO PROJECT TEAM
-          **       
+**                         BUILDWIN HAL LAYER
+** *   **                     THE APPOTECH HAL
+**** **                         CSI HAL LAYER DRIVER
+*** ***
+**  * **               (C) COPYRIGHT 2016 BUILDWIN
+**      **
+**         BuildWin SZ LTD.CO  ; VIDEO PROJECT TEAM
+**
 * File Name   : hal_csi.c
-* Author      : Mark.Douglas 
+* Author      : Mark.Douglas
 * Version     : V0200
 * Date        : 05/25/2016
 * Description : This file for BUILDWIN CSI HARDWARE LAYER.
-*               
-*               
+*
+*
 * History     :
-* 2017-02-27  : 
+* 2017-02-27  :
 *      <1>.This is created by mark,set version as v0100.
 *      <2>.Add basic functions.
 ******************************************************************************/
 #include "../inc/hal.h"
 #include "../../ax32_platform_demo/application.h"
 
-
-YUV_ADD_T   yuv_add_s;
+YUV_ADD_T yuv_add_s;
 enum
 {
 	FRAME_NULL = 0,
@@ -33,7 +32,7 @@ enum
 };
 extern int nv_open(int res_num);
 extern int nv_size(int res_num);
-extern int nv_read(int addr,void *buffer,int size);
+extern int nv_read(int addr, void *buffer, int size);
 
 #if 0
 /*******************************************************************************
@@ -569,117 +568,117 @@ void hal_custom_frame_reset_sensor_szie()
 
 #else
 
-INT32S hal_custom_frame_init(void)  //init buf
+INT32S hal_custom_frame_init(void) // init buf
 {
 	INT32S ret = 0;
 	//--------init yuv_add_s ---------
-	memset((void*)&yuv_add_s,0, sizeof(YUV_ADD_T));
+	memset((void *)&yuv_add_s, 0, sizeof(YUV_ADD_T));
 
-/*
-	if(hal_csiResolutionGet(&yuv_add_s.sensor_width,&yuv_add_s.sensor_height)<0)
-	{
-		deg_Printf("----get csi resolution fail-----\n");
-		ret = -1;
-		goto INIT_FAIL;
-	}
-	else
-	{
-		deg_Printf("----sensor width:%d, height:%d-----<<\n",yuv_add_s.sensor_width,yuv_add_s.sensor_height);
-		yuv_add_s.sensor_frame_size = yuv_add_s.sensor_width*yuv_add_s.sensor_height;
-		yuv_add_s.sensor_yuv_addr = (u32)hal_sysMemMalloc(yuv_add_s.sensor_frame_size*3/2,64);
-		if(yuv_add_s.sensor_yuv_addr == 0)
+	/*
+		if(hal_csiResolutionGet(&yuv_add_s.sensor_width,&yuv_add_s.sensor_height)<0)
 		{
-			deg_Printf("----frame add sensor buf malloc fail-----\n");
-			ret = -2;
+			deg_Printf("----get csi resolution fail-----\n");
+			ret = -1;
 			goto INIT_FAIL;
 		}
 		else
 		{
-			deg_Printf("----frame add sensor buf adr:%x, size:%d\n",yuv_add_s.sensor_yuv_addr,yuv_add_s.sensor_frame_size*3/2);
+			deg_Printf("----sensor width:%d, height:%d-----<<\n",yuv_add_s.sensor_width,yuv_add_s.sensor_height);
+			yuv_add_s.sensor_frame_size = yuv_add_s.sensor_width*yuv_add_s.sensor_height;
+			yuv_add_s.sensor_yuv_addr = (u32)hal_sysMemMalloc(yuv_add_s.sensor_frame_size*3/2,64);
+			if(yuv_add_s.sensor_yuv_addr == 0)
+			{
+				deg_Printf("----frame add sensor buf malloc fail-----\n");
+				ret = -2;
+				goto INIT_FAIL;
+			}
+			else
+			{
+				deg_Printf("----frame add sensor buf adr:%x, size:%d\n",yuv_add_s.sensor_yuv_addr,yuv_add_s.sensor_frame_size*3/2);
+			}
 		}
-	}
-	
-	//if(hal_lcdGetOSDShowingResolution(&yuv_add_s.lcd_width,&yuv_add_s.lcd_height)<0)
-	if(hal_lcdGetBufferResolution(&yuv_add_s.lcd_width,&yuv_add_s.lcd_height)<0)
-	{
-		deg_Printf("----get lcd resolution fail-----\n");
-		ret = -1;
-		goto INIT_FAIL;
-	}
-	else
-	{
-		deg_Printf("----lcd width:%d, height:%d-----\n",yuv_add_s.lcd_width,yuv_add_s.lcd_height);
-		yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width*yuv_add_s.lcd_height;
-		yuv_add_s.lcd_yuv_addr = (u32)hal_sysMemMalloc(yuv_add_s.lcd_frame_size*3/2,64);
-		if(yuv_add_s.lcd_yuv_addr == 0)
+
+		//if(hal_lcdGetOSDShowingResolution(&yuv_add_s.lcd_width,&yuv_add_s.lcd_height)<0)
+		if(hal_lcdGetBufferResolution(&yuv_add_s.lcd_width,&yuv_add_s.lcd_height)<0)
 		{
-			deg_Printf("----frame add  lcd buf malloc fail-----\n");
-			ret = -2;
+			deg_Printf("----get lcd resolution fail-----\n");
+			ret = -1;
 			goto INIT_FAIL;
 		}
 		else
 		{
-			deg_Printf("----frame add lcd buf adr:%x, size:%d\n",yuv_add_s.lcd_yuv_addr,yuv_add_s.lcd_frame_size*3/2);
+			deg_Printf("----lcd width:%d, height:%d-----\n",yuv_add_s.lcd_width,yuv_add_s.lcd_height);
+			yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width*yuv_add_s.lcd_height;
+			yuv_add_s.lcd_yuv_addr = (u32)hal_sysMemMalloc(yuv_add_s.lcd_frame_size*3/2,64);
+			if(yuv_add_s.lcd_yuv_addr == 0)
+			{
+				deg_Printf("----frame add  lcd buf malloc fail-----\n");
+				ret = -2;
+				goto INIT_FAIL;
+			}
+			else
+			{
+				deg_Printf("----frame add lcd buf adr:%x, size:%d\n",yuv_add_s.lcd_yuv_addr,yuv_add_s.lcd_frame_size*3/2);
+			}
 		}
-	}
-*/
+	*/
 
 	return ret;
-
 }
 /*******************************************************************************
-* Function Name  : hal_custom_frame_create
-* Description    : hal_custom_frame_create
-* Input          : frame id :read from resource
-* Output         : None
-* Return         : 0:Sucess; -1: Fail
-*******************************************************************************/
+ * Function Name  : hal_custom_frame_create
+ * Description    : hal_custom_frame_create
+ * Input          : frame id :read from resource
+ * Output         : None
+ * Return         : 0:Sucess; -1: Fail
+ *******************************************************************************/
 
 INT32S hal_custom_frame_create(INT32U idx)
 {
+	// deg_Printf("hal_custom_frame.............................\n");
+	// hal_sysMemPrint();
 	INT8U *jpegBuffer;
-	INT32S len,addr;
-	u16 src_width , src_height;
+	INT32S len, addr;
+	u16 src_width, src_height;
 	u32 decode_lcd_size, decode_sensor_size;
 	INT32S ret = 0;
 
 	jpegBuffer = NULL;
-
+	doublebuf_And_resbuf_Ctrl(0);
 	//--------init yuv_add_s ---------
 	HAL_CRITICAL_INIT();
 	HAL_CRITICAL_ENTER();
-	deg_Printf("idx=%d\n",idx);
+	deg_Printf("idx=%d\n", idx);
 
 	//==malloc lcd buf==
-	hal_lcdGetBufferResolution(&yuv_add_s.lcd_width,&yuv_add_s.lcd_height);
-	deg_Printf("lcd w=%d,h=%d\n",yuv_add_s.lcd_width,yuv_add_s.lcd_height);
-	//yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width*yuv_add_s.lcd_height;
+	hal_lcdGetBufferResolution(&yuv_add_s.lcd_width, &yuv_add_s.lcd_height);
+	deg_Printf("lcd w=%d,h=%d\n", yuv_add_s.lcd_width, yuv_add_s.lcd_height);
+	// yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width*yuv_add_s.lcd_height;
 
-	if(( yuv_add_s.lcd_width == 220 ) && (yuv_add_s.lcd_height == 176 ) )
+	if ((yuv_add_s.lcd_width == 220) && (yuv_add_s.lcd_height == 176))
 	{
-		yuv_add_s.lcd_width =320;
-		yuv_add_s.lcd_height=240;
-		yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width*yuv_add_s.lcd_height;
+		yuv_add_s.lcd_width = 320;
+		yuv_add_s.lcd_height = 240;
+		yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width * yuv_add_s.lcd_height;
 
-		yuv_add_s.lcd_small_width =220;
-		yuv_add_s.lcd_small_height=176;
-		yuv_add_s.lcd_small_width=(yuv_add_s.lcd_small_width + 0x1f) & (~0x1f);  // add 32bit alignment
-		yuv_add_s.lcd_small_frame_size = yuv_add_s.lcd_small_width*yuv_add_s.lcd_small_height;
+		yuv_add_s.lcd_small_width = 220;
+		yuv_add_s.lcd_small_height = 176;
+		yuv_add_s.lcd_small_width = (yuv_add_s.lcd_small_width + 0x1f) & (~0x1f); // add 32bit alignment
+		yuv_add_s.lcd_small_frame_size = yuv_add_s.lcd_small_width * yuv_add_s.lcd_small_height;
 	}
 	else
 	{
-		yuv_add_s.lcd_small_width =0;
-		yuv_add_s.lcd_small_height=0;
+		yuv_add_s.lcd_small_width = 0;
+		yuv_add_s.lcd_small_height = 0;
 
-		yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width*yuv_add_s.lcd_height;
-		yuv_add_s.lcd_small_frame_size = yuv_add_s.lcd_small_width*yuv_add_s.lcd_small_height;
+		yuv_add_s.lcd_frame_size = yuv_add_s.lcd_width * yuv_add_s.lcd_height;
+		yuv_add_s.lcd_small_frame_size = yuv_add_s.lcd_small_width * yuv_add_s.lcd_small_height;
 	}
 
-	
-	if(NULL==yuv_add_s.lcd_yuv_buf)
+	if (NULL == yuv_add_s.lcd_yuv_buf)
 	{
-		yuv_add_s.lcd_yuv_buf = hal_sysMemMalloc(yuv_add_s.lcd_frame_size*3/2,64);
-		if(NULL==yuv_add_s.lcd_yuv_buf)
+		yuv_add_s.lcd_yuv_buf = hal_sysMemMalloc(yuv_add_s.lcd_frame_size * 3 / 2, 64);
+		if (NULL == yuv_add_s.lcd_yuv_buf)
 		{
 			deg_Printf("lcd buf malloc fail\n");
 			ret = -1;
@@ -687,27 +686,27 @@ INT32S hal_custom_frame_create(INT32U idx)
 		}
 	}
 
-	if( (NULL==yuv_add_s.lcd_small_yuv_buf) && ( yuv_add_s.lcd_small_frame_size != 0 )) 
+	if ((NULL == yuv_add_s.lcd_small_yuv_buf) && (yuv_add_s.lcd_small_frame_size != 0))
 	{
-		yuv_add_s.lcd_small_yuv_buf = hal_sysMemMalloc(yuv_add_s.lcd_small_frame_size*3/2,64);
-		if(NULL==yuv_add_s.lcd_small_yuv_buf)
+		yuv_add_s.lcd_small_yuv_buf = hal_sysMemMalloc(yuv_add_s.lcd_small_frame_size * 3 / 2, 64);
+		if (NULL == yuv_add_s.lcd_small_yuv_buf)
 		{
 			deg_Printf("lcd buf malloc fail\n");
 			ret = -1;
 			goto CREATE_FAIL;
 		}
 	}
-	
+
 	//==end malloc lcd buf==
 	addr = nv_open((int)idx);
-	if(addr<0)
+	if (addr < 0)
 	{
 		deg_Printf("open frame from resourse fail\n");
 		ret = -2;
 		goto CREATE_FAIL;
 	}
-	jpegBuffer = (INT8U *)hal_sysMemMalloc(nv_size(idx),64);
-	if(jpegBuffer == NULL)
+	jpegBuffer = (INT8U *)hal_sysMemMalloc(nv_size(idx), 64);
+	if (jpegBuffer == NULL)
 	{
 		deg_Printf("hal_custom_frame_create malloc fail\n");
 		ret = -3;
@@ -716,187 +715,191 @@ INT32S hal_custom_frame_create(INT32U idx)
 	else
 	{
 		len = nv_size((int)idx);
-		nv_read(addr,jpegBuffer,len);
+		nv_read(addr, jpegBuffer, len);
 	}
 
 	hal_lcdSetPIPEnable(0);
 
-	ret=hal_mjpegHeaderParse(jpegBuffer);
-	if(ret<0)
+	ret = hal_mjpegHeaderParse(jpegBuffer);
+	if (ret < 0)
 	{
-		deg_Printf("jpeg header parse fail.%d\n",ret);
+		deg_Printf("jpeg header parse fail.%d\n", ret);
 		goto CREATE_FAIL;
 	}
-	hal_mjpegDecodeGetResolution(&src_width,&src_height);
-	deg_Printf("src_width:%d,src_height:%d,len=%d\n",src_width,src_height,len);
+	hal_mjpegDecodeGetResolution(&src_width, &src_height);
+	deg_Printf("src_width:%d,src_height:%d,len=%d\n", src_width, src_height, len);
 
-
-	if(hal_mjpegDecodeNoIsr(jpegBuffer,(u8*)(yuv_add_s.lcd_yuv_buf),(u8*)(yuv_add_s.lcd_yuv_buf+yuv_add_s.lcd_width*yuv_add_s.lcd_height),yuv_add_s.lcd_width,yuv_add_s.lcd_height)<0)
+	if (hal_mjpegDecodeNoIsr(jpegBuffer, (u8 *)(yuv_add_s.lcd_yuv_buf), (u8 *)(yuv_add_s.lcd_yuv_buf + yuv_add_s.lcd_width * yuv_add_s.lcd_height), yuv_add_s.lcd_width, yuv_add_s.lcd_height) < 0)
 	{
 		ret = -5;
 		goto CREATE_FAIL;
 	}
 
-	if(!jpeg1_decode_check())
+	if (!jpeg1_decode_check())
 	{
 		ret = -6;
 		goto CREATE_FAIL;
 	}
 
-	if( yuv_add_s.lcd_small_yuv_buf != NULL )
+	if (yuv_add_s.lcd_small_yuv_buf != NULL)
 	{
-		if(hal_mjpegDecodeNoIsr(jpegBuffer,(u8*)(yuv_add_s.lcd_small_yuv_buf),(u8*)(yuv_add_s.lcd_small_yuv_buf+yuv_add_s.lcd_small_width*yuv_add_s.lcd_small_height),yuv_add_s.lcd_small_width,yuv_add_s.lcd_small_height)<0)
+		if (hal_mjpegDecodeNoIsr(jpegBuffer, (u8 *)(yuv_add_s.lcd_small_yuv_buf), (u8 *)(yuv_add_s.lcd_small_yuv_buf + yuv_add_s.lcd_small_width * yuv_add_s.lcd_small_height), yuv_add_s.lcd_small_width, yuv_add_s.lcd_small_height) < 0)
 		{
 			ret = -5;
 			goto CREATE_FAIL;
 		}
 
-		if(!jpeg1_decode_check())
+		if (!jpeg1_decode_check())
 		{
 			ret = -6;
 			goto CREATE_FAIL;
 		}
 	}
 
-	if(jpegBuffer)
+	if (jpegBuffer)
 		hal_sysMemFree((void *)jpegBuffer);
 
 	yuv_add_s.frame_stat = FRAME_ADD;
 	HAL_CRITICAL_EXIT();
-	
+	doublebuf_And_resbuf_Ctrl(1);
+	// deg_Printf("hal_custom_frame2.............................\n");
+	// hal_sysMemPrint();
 	return ret;
-	
+
 CREATE_FAIL:
 
-	if(jpegBuffer)
+	if (jpegBuffer)
 	{
 		hal_sysMemFree(jpegBuffer);
 	}
 
-	if(yuv_add_s.lcd_yuv_buf)
+	if (yuv_add_s.lcd_yuv_buf)
 	{
 		hal_sysMemFree(yuv_add_s.lcd_yuv_buf);
-		yuv_add_s.lcd_yuv_buf=NULL;
+		yuv_add_s.lcd_yuv_buf = NULL;
 	}
 
-	if(yuv_add_s.lcd_small_yuv_buf)
+	if (yuv_add_s.lcd_small_yuv_buf)
 	{
 		hal_sysMemFree(yuv_add_s.lcd_small_yuv_buf);
-		yuv_add_s.lcd_small_yuv_buf=NULL;
+		yuv_add_s.lcd_small_yuv_buf = NULL;
 	}
 
 	HAL_CRITICAL_EXIT();
+	// deg_Printf("hal_custom_frame3.............................\n");
+	doublebuf_And_resbuf_Ctrl(1);
+	// hal_sysMemPrint();
 	return ret;
 }
 
 /*******************************************************************************
-* Function Name  : hal_custom_frame_unit
-* Description    : hal_custom_frame_unit, free malloc frame buf
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
+ * Function Name  : hal_custom_frame_unit
+ * Description    : hal_custom_frame_unit, free malloc frame buf
+ * Input          : None
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
 void hal_custom_frame_unit(void)
 {
-	if(yuv_add_s.lcd_yuv_buf)
+	if (yuv_add_s.lcd_yuv_buf)
 	{
 		hal_sysMemFree(yuv_add_s.lcd_yuv_buf);
-		yuv_add_s.lcd_yuv_buf=NULL;
+		yuv_add_s.lcd_yuv_buf = NULL;
 	}
 
-	if(yuv_add_s.lcd_small_yuv_buf)
+	if (yuv_add_s.lcd_small_yuv_buf)
 	{
 		hal_sysMemFree(yuv_add_s.lcd_small_yuv_buf);
-		yuv_add_s.lcd_small_yuv_buf=NULL;
+		yuv_add_s.lcd_small_yuv_buf = NULL;
 	}
 
-	if(yuv_add_s.sensor_yuv_buf)
+	if (yuv_add_s.sensor_yuv_buf)
 	{
 		hal_sysMemFree(yuv_add_s.sensor_yuv_buf);
-		yuv_add_s.sensor_yuv_buf=NULL;
+		yuv_add_s.sensor_yuv_buf = NULL;
 	}
 }
 /*******************************************************************************
-* Function Name  : hal_custom_frame_add_enable
-* Description    : hal_custom_frame_add_enable
-* Input          : en: 1 enable frame add, 0 disable frame add
-* Output         : None
-* Return         : None
-*******************************************************************************/
+ * Function Name  : hal_custom_frame_add_enable
+ * Description    : hal_custom_frame_add_enable
+ * Input          : en: 1 enable frame add, 0 disable frame add
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
 void hal_custom_frame_add_enable(u32 en)
 {
-	//HAL_CRITICAL_INIT();
-	//HAL_CRITICAL_ENTER();
-	//deg_Printf("yuv_add_s.frame_stat:%d,en:%d\n",yuv_add_s.frame_stat,en);
-	if(en)
-	{	
-		if(yuv_add_s.frame_stat == FRAME_NULL)
+	// HAL_CRITICAL_INIT();
+	// HAL_CRITICAL_ENTER();
+	// deg_Printf("yuv_add_s.frame_stat:%d,en:%d\n",yuv_add_s.frame_stat,en);
+	if (en)
+	{
+		if (yuv_add_s.frame_stat == FRAME_NULL)
 		{
 			yuv_add_s.frame_stat = FRAME_ADD;
 		}
 	}
 	else
 	{
-		if(yuv_add_s.frame_stat == FRAME_ADD)
+		if (yuv_add_s.frame_stat == FRAME_ADD)
 		{
 			yuv_add_s.frame_stat = FRAME_NULL;
 		}
 	}
-	//HAL_CRITICAL_EXIT();
+	// HAL_CRITICAL_EXIT();
 }
 
- 
-static void frame_draw_buf(u8 *dst_ybuf,u8 *src_ybuf,u16 src_w,u16 src_h,u8 alpha_y)
+static void frame_draw_buf(u8 *dst_ybuf, u8 *src_ybuf, u16 src_w, u16 src_h, u8 alpha_y)
 {
-	u16 i,j;
-	u8 *dy,*duv,*sy,*suv;
+	u16 i, j;
+	u8 *dy, *duv, *sy, *suv;
 
-	src_w=(src_w + 0x1f) & (~0x1f);  // add 32bit alignment
+	src_w = (src_w + 0x1f) & (~0x1f); // add 32bit alignment
 
-	dy=dst_ybuf;
-	duv=dst_ybuf+src_w*src_h;
-	sy=src_ybuf;
-	suv=src_ybuf+src_w*src_h;
+	dy = dst_ybuf;
+	duv = dst_ybuf + src_w * src_h;
+	sy = src_ybuf;
+	suv = src_ybuf + src_w * src_h;
 
 	//==draw ==
-	for(j=0;j<src_h;j+=2)
+	for (j = 0; j < src_h; j += 2)
 	{
-		for(i=0;i<src_w;i++)
+		for (i = 0; i < src_w; i++)
 		{
-			if((*(sy+i)>alpha_y))  // y
+			if ((*(sy + i) > alpha_y)) // y
 			{
-				*(dy+i)=*(sy+i);
-				*(duv+i)=*(suv+i);
+				*(dy + i) = *(sy + i);
+				*(duv + i) = *(suv + i);
 			}
 		}
 
-		dy+=src_w;
-		sy+=src_w;
+		dy += src_w;
+		sy += src_w;
 
-		for(i=0;i<src_w;i++)
+		for (i = 0; i < src_w; i++)
 		{
-			if((*(sy+i)>alpha_y))  //uv
+			if ((*(sy + i) > alpha_y)) // uv
 			{
-				*(dy+i)=*(sy+i);
-				*(duv+i)=*(suv+i);
+				*(dy + i) = *(sy + i);
+				*(duv + i) = *(suv + i);
 			}
 		}
-		
-		dy+=src_w;
-		sy+=src_w;
-		duv+=src_w;
-		suv+=src_w;
+
+		dy += src_w;
+		sy += src_w;
+		duv += src_w;
+		suv += src_w;
 	}
-	
 }
-static void  frame_draw_sensor_buf(u8 *dst_ybuf,u16 *dst_uvbuf,u16 dst_w,u16 dst_h,u8 *src_ybuf,u16 src_w,u16 src_h)
+static void frame_draw_sensor_buf(u8 *dst_ybuf, u16 *dst_uvbuf, u16 dst_w, u16 dst_h, u8 *src_ybuf, u16 src_w, u16 src_h)
 {
 	u32 i, j, x, y, offset_pixel, offset_pixel_uv, offset_data, offset_data_uv;
-	u16 *src_uvbuf = (u16 *)(src_ybuf + src_w*src_h);
-	u32 interval_w = 1000000*src_w/dst_w + 1, interval_h = 1000000*src_h/dst_h + 1, interval_i, interval_j;
-	
-	for(j = 0, y = 0, interval_j = 0; j < dst_h; j++, interval_j += interval_h){
-		if(interval_j >= 1000000){
+	u16 *src_uvbuf = (u16 *)(src_ybuf + src_w * src_h);
+	u32 interval_w = 1000000 * src_w / dst_w + 1, interval_h = 1000000 * src_h / dst_h + 1, interval_i, interval_j;
+
+	for (j = 0, y = 0, interval_j = 0; j < dst_h; j++, interval_j += interval_h)
+	{
+		if (interval_j >= 1000000)
+		{
 			interval_j -= 1000000;
 			y++;
 		}
@@ -904,71 +907,70 @@ static void  frame_draw_sensor_buf(u8 *dst_ybuf,u16 *dst_uvbuf,u16 dst_w,u16 dst
 		offset_pixel = j * dst_w;
 		offset_data_uv = (y >> 1) * (src_w >> 1);
 		offset_pixel_uv = (j >> 1) * (dst_w >> 1);
-		
-		for(i = 0, x = 0, interval_i = 0; i < dst_w; i++, interval_i += interval_w){
-			if(interval_i >= 1000000){
+
+		for (i = 0, x = 0, interval_i = 0; i < dst_w; i++, interval_i += interval_w)
+		{
+			if (interval_i >= 1000000)
+			{
 				interval_i -= 1000000;
 				x++;
 			}
-			if(*(src_ybuf + offset_data + x) < Y_THD)
+			if (*(src_ybuf + offset_data + x) < Y_THD)
 				continue;
 			*(dst_ybuf + offset_pixel + i) = *(src_ybuf + offset_data + x);
 			*(dst_uvbuf + offset_pixel_uv + (i >> 1)) = *(src_uvbuf + offset_data_uv + (x >> 1));
 		}
 	}
-	ax32xx_sysDcacheWback(dst_ybuf,dst_w*dst_h);  
-	ax32xx_sysDcacheWback(dst_uvbuf, dst_w*dst_h/2);
+	ax32xx_sysDcacheWback(dst_ybuf, dst_w * dst_h);
+	ax32xx_sysDcacheWback(dst_uvbuf, dst_w * dst_h / 2);
 }
 
-
 /*******************************************************************************
-* Function Name  : hal_custom_frame_add_lcd
-* Description    : add frame to lcd display
-* Input          : dst_y_addr: lcd yuv addr
-* Output         : None
-* Return         : None
-*******************************************************************************/
+ * Function Name  : hal_custom_frame_add_lcd
+ * Description    : add frame to lcd display
+ * Input          : dst_y_addr: lcd yuv addr
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
 void hal_custom_frame_add_lcd(u8 *dst_ybuf)
 {
-	if(yuv_add_s.frame_stat != FRAME_ADD)
+	if (yuv_add_s.frame_stat != FRAME_ADD)
 	{
 		return;
 	}
 
-	if( yuv_add_s.lcd_small_yuv_buf )
+	if (yuv_add_s.lcd_small_yuv_buf)
 	{
-		frame_draw_buf(dst_ybuf,yuv_add_s.lcd_small_yuv_buf,yuv_add_s.lcd_small_width,yuv_add_s.lcd_small_height,Y_THD);
-		ax32xx_sysDcacheFlush((u32)dst_ybuf,yuv_add_s.lcd_small_frame_size*3/2);
+		frame_draw_buf(dst_ybuf, yuv_add_s.lcd_small_yuv_buf, yuv_add_s.lcd_small_width, yuv_add_s.lcd_small_height, Y_THD);
+		ax32xx_sysDcacheFlush((u32)dst_ybuf, yuv_add_s.lcd_small_frame_size * 3 / 2);
 	}
 	else
 	{
-		frame_draw_buf(dst_ybuf,yuv_add_s.lcd_yuv_buf,yuv_add_s.lcd_width,yuv_add_s.lcd_height,Y_THD);
-		ax32xx_sysDcacheFlush((u32)dst_ybuf,yuv_add_s.lcd_frame_size*3/2);
+		frame_draw_buf(dst_ybuf, yuv_add_s.lcd_yuv_buf, yuv_add_s.lcd_width, yuv_add_s.lcd_height, Y_THD);
+		ax32xx_sysDcacheFlush((u32)dst_ybuf, yuv_add_s.lcd_frame_size * 3 / 2);
 	}
-	//ax32xx_sysDcacheFlush((u32)dst_ybuf,yuv_add_s.lcd_frame_size*3/2);
+	// ax32xx_sysDcacheFlush((u32)dst_ybuf,yuv_add_s.lcd_frame_size*3/2);
 }
 /*******************************************************************************
-* Function Name  : hal_custom_frame_add_mjpeg
-* Description    : add frame to mjpeg display
-* Input          : dst_y_addr: mjpeg yuv addr
-* Output         : None
-* Return         : None
-*******************************************************************************/
+ * Function Name  : hal_custom_frame_add_mjpeg
+ * Description    : add frame to mjpeg display
+ * Input          : dst_y_addr: mjpeg yuv addr
+ * Output         : None
+ * Return         : None
+ *******************************************************************************/
 void hal_custom_frame_add_mjpeg(u8 *dst_ybuf)
 {
-	if(yuv_add_s.frame_stat != FRAME_ADD)
+	if (yuv_add_s.frame_stat != FRAME_ADD)
 	{
-		return ;
+		return;
 	}
-	u16 csi_w,csi_h,crop_w,crop_h;
-	
-	hal_csiResolutionGet(&csi_w,&csi_h);
-	crop_w =  ((csi_w * (100 - SysCtrl.crop_level*5/3) / 100) + 0x1f) & (~0x1f);
-	crop_h = (csi_h * (100 - SysCtrl.crop_level*5/3) / 100) & ~1;
-	//deg_Printf("-----------0x%x,0x%x--------------.\n",dst_ybuf[0],yuv_add_s.lcd_yuv_buf[0]);
-	frame_draw_sensor_buf(dst_ybuf,(u16 *)(dst_ybuf+csi_w*csi_h),crop_w,crop_h,yuv_add_s.lcd_yuv_buf,yuv_add_s.lcd_width,yuv_add_s.lcd_height);
-	
+	u16 csi_w, csi_h, crop_w, crop_h;
+
+	hal_csiResolutionGet(&csi_w, &csi_h);
+	crop_w = ((csi_w * (100 - SysCtrl.crop_level * 5 / 3) / 100) + 0x1f) & (~0x1f);
+	crop_h = (csi_h * (100 - SysCtrl.crop_level * 5 / 3) / 100) & ~1;
+	// deg_Printf("-----------0x%x,0x%x--------------.\n",dst_ybuf[0],yuv_add_s.lcd_yuv_buf[0]);
+	frame_draw_sensor_buf(dst_ybuf, (u16 *)(dst_ybuf + csi_w * csi_h), crop_w, crop_h, yuv_add_s.lcd_yuv_buf, yuv_add_s.lcd_width, yuv_add_s.lcd_height);
 }
 
 #endif
-

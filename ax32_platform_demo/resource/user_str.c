@@ -229,5 +229,7 @@ R_STRING_T User_String_Table[R_STR_MAX&0xffff] =
    {R_ID_STR_GAME_006               ,  (void *)0,0,0,0x000000c9},
    {R_ID_STR_GAME_007               ,  (void *)0,0,0,0x000000ca},
    {R_ID_STR_TIPS_SPI_FULL          ,  (void *)0,0,0,0x000000cb},
+   {R_ID_STR_MUSICNAME              ,  (void *)0,0,0,0x000000cc},
+   {R_ID_STR_MUSICTIME              ,  (void *)0,0,0,0x000000cd},
 };
 

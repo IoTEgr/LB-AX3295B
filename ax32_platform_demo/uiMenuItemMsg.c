@@ -317,17 +317,28 @@ static int menuItemWinChildClose(winHandle handle, uint32 parameNum, uint32 *par
 }
 static int menuItemSysMsg1s(winHandle handle, uint32 parameNum, uint32 *parame)
 {
-	if (SysCtrl.usb == USB_STAT_DCIN)
+	if (SysCtrl.usb != USB_STAT_NULL)
 	{
-
-		if (winIsVisible(winItem(handle, ITEM_BATERRY_ID)))
-			winSetVisible(winItem(handle, ITEM_BATERRY_ID), false);
-		else
+		SysCtrl.bat_charge_idx++;
+		if (SysCtrl.bat_charge_idx > 3)
 		{
-			winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY5);
-			winSetVisible(winItem(handle, ITEM_BATERRY_ID), true);
+			SysCtrl.bat_charge_idx = 0;
 		}
+		winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY1 + SysCtrl.bat_charge_idx);
 	}
+	else if (SysCtrl.battery == BATTERY_STAT_4)
+		winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY4);
+	else if (SysCtrl.battery == BATTERY_STAT_3)
+		winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY3);
+	else if (SysCtrl.battery == BATTERY_STAT_2)
+		winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY2);
+	else if (SysCtrl.battery == BATTERY_STAT_1)
+		winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY1);
+	else if (SysCtrl.battery == BATTERY_STAT_0)
+		winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY0);
+	else
+		winSetResid(winItem(handle, ITEM_BATERRY_ID), R_ID_ICON_MTBATTERY4);
+	winSetVisible(winItem(handle, ITEM_BATERRY_ID), true);
 #if SMALL_PANEL_SUPPORT == 0
 	itemPoweOnTimeShow(handle, SysCtrl.powerOnTime);
 #endif

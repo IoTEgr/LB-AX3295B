@@ -132,7 +132,8 @@
 #define FILEDIR_VIDEOA "VIDEOA/"
 #define FILEDIR_VIDEOB "VIDEOB/"
 #endif
-
+#define MP3_SHOW_MOVE 0      // 1:use mp3 move , 0:disable
+#define ENABLE_FLASH_PHOTO 1 // choose enable flash storage photo. 1:enable	,0:disable
 #if (1 == AVI_LOCK_FOLDER)
 #define FILEDIR_LOCKA "SOSA/"
 #define FILEDIR_LOCKB "SOSB/"
@@ -160,4 +161,13 @@
 #endif
 #endif
 
+#define AUDIO_MP3_VOLUME 50
+
+#define AUDIOPLAYER_LIST_NUM 6
+#define AUDIOPLAYER_LIST_SHOW_TIME 6
+
+#define AUDIOPLAYER_LIST_FILE_MAX 256
+#define AUDIOPLAYER_NAME_LEN_MAX 64
+
+#define AUDIOPLAYER_DEC_CNT 32
 #endif

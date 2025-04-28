@@ -842,7 +842,6 @@ int imageEncodeStart(FHANDLE fileHanle, INT16U image_width, INT16U image_height,
 	if (0 != SysCtrl.crop_level)
 #endif
 	{
-		// deg_Printf("555555555555555555\r\n");
 		hal_mjpegPhotoStart2(image_width, image_height, image_q, 0 /*timestramp*/, frame_enable, 0, 0); // didn't crop ,use orig
 		timeout = XOSTimeGet();
 		while (1)
@@ -927,10 +926,4 @@ IMAGE_ENCODE_ERR:
 		videoRecordImageWatermark(image_width, image_height, 0); // disable
 	return res;
 }
-
-// extern int mjpB_actech_as_photo(u16 win_w, u16 win_h, u8 quality);
-// extern bool hal_mjpB_usensor_fram_rd(u8 **p, u32 *len, u32 *id,s32 *u_sync, s32 *u_sync_next);
-// extern bool hal_mjpB_usensor_fram_free(void);
-// extern void api_mjp_avi_stop(void);
-
 #endif

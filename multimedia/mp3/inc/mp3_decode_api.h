@@ -59,7 +59,7 @@ int mp3_dac_memInit(u32 pcm_fifo_num,u32 pcm_fifo_size,u32 mp3_buf_size);
 void mp3_dac_memUinit(void);
 
 
-int mp3_dacPlay_Start(void);
+int mp3_dacPlay_Start(u8 vol);
 int mp3_dacPlay_Pause(void);
 int mp3_dacPlay_Stop(void);
 

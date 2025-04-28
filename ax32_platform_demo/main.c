@@ -94,10 +94,9 @@ int init(void)
 
 	DAC_PA_MUTE_INIT();
 	DAC_PA_MUTE_OFF();
-
 	//----------board initial,LCD,LED,SPI,ADC,DAC....
 	boardInit(NULL); // initial main board
-					 //----------get board device ioctrl handler
+	//----------get board device ioctrl handler
 	memset(&SysCtrl, 0, sizeof(System_Ctrl_T));
 	SysCtrl.bfd_battery = boardOpen(DEV_NAME_BATTERY);
 	// SysCtrl.bfd_gsensor = boardOpen(DEV_NAME_GSENSOR);
@@ -222,7 +221,6 @@ int init(void)
 	SysCtrl.battery = BATTERY_STAT_4; // DEFAULT VALUE
 									  //--------initial fs
 	fs_init();
-
 	//--------board check ,the first time.
 	taskSysScanDev(0); // check board state
 #if 0

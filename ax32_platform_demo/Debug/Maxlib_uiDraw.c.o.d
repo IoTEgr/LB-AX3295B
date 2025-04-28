@@ -82,8 +82,9 @@ Debug/Maxlib_uiDraw.c.o: ../bwlib/Maxlib/uiDraw.c ../bwlib/Maxlib/max.h \
  ../bwlib/Maxlib/./std/./../max.h ../bwlib/Maxlib/./std/str.h \
  ../bwlib/Maxlib/./std/std_math.h ../bwlib/Maxlib/maxlib.h \
  ../bwlib/Maxlib/./res/R.h ../bwlib/Maxlib/./res/R_icon.h \
- ../bwlib/Maxlib/./res/R_string.h ../bwlib/Maxlib/../../sUI/winManage.h \
- ../bwlib/Maxlib/../../sUI/mType.h \
+ ../bwlib/Maxlib/./res/R_string.h \
+ ../bwlib/Maxlib/../../bwlib/maxlib/res/ascii.h \
+ ../bwlib/Maxlib/../../sUI/winManage.h ../bwlib/Maxlib/../../sUI/mType.h \
  ../bwlib/Maxlib/../../sUI/../hal/inc/hal.h \
  ../bwlib/Maxlib/../../sUI/debug.h \
  ../bwlib/Maxlib/../../sUI/../ax32xx/inc/typedef.h \
@@ -176,7 +177,9 @@ Debug/Maxlib_uiDraw.c.o: ../bwlib/Maxlib/uiDraw.c ../bwlib/Maxlib/max.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/../sUI/menuItemEx.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/../sUI/widgetManage.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/application.h \
- ../bwlib/Maxlib/../../ax32_platform_demo/menu.h
+ ../bwlib/Maxlib/../../ax32_platform_demo/menu.h \
+ ../bwlib/Maxlib/../../multimedia/unifont/ebook.h \
+ ../bwlib/Maxlib/../../multimedia/unifont/ebook_type.h
 
 ../bwlib/Maxlib/max.h:
 
@@ -357,6 +360,8 @@ Debug/Maxlib_uiDraw.c.o: ../bwlib/Maxlib/uiDraw.c ../bwlib/Maxlib/max.h \
 ../bwlib/Maxlib/./res/R_icon.h:
 
 ../bwlib/Maxlib/./res/R_string.h:
+
+../bwlib/Maxlib/../../bwlib/maxlib/res/ascii.h:
 
 ../bwlib/Maxlib/../../sUI/winManage.h:
 
@@ -549,3 +554,7 @@ Debug/Maxlib_uiDraw.c.o: ../bwlib/Maxlib/uiDraw.c ../bwlib/Maxlib/max.h \
 ../bwlib/Maxlib/../../ax32_platform_demo/application.h:
 
 ../bwlib/Maxlib/../../ax32_platform_demo/menu.h:
+
+../bwlib/Maxlib/../../multimedia/unifont/ebook.h:
+
+../bwlib/Maxlib/../../multimedia/unifont/ebook_type.h:

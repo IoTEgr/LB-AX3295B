@@ -32,15 +32,12 @@ static void MainMenuBaterryShow(winHandle handle)
 	// deg_Printf("*************SysCtrl.battery %d  ***\n",SysCtrl.battery);
 	if (SysCtrl.usb != USB_STAT_NULL)
 	{
-		if (hal_gpioRead(CHECK_FULL_CH, CHECK_FULL_PIN))
+		SysCtrl.bat_charge_idx++;
+		if (SysCtrl.bat_charge_idx > 3)
 		{
-			winSetResid(winItem(handle, MAINMENU_BATTERY_ID), R_ID_ICON_MTBATTERY4);
-			// boardIoctrl(SysCtrl.bfd_led,IOCTRL_LED_B,1);
+			SysCtrl.bat_charge_idx = 0;
 		}
-		else
-		{
-			winSetResid(winItem(handle, MAINMENU_BATTERY_ID), R_ID_ICON_MTBATTERY5);
-		}
+		winSetResid(winItem(handle, MAINMENU_BATTERY_ID), R_ID_ICON_MTBATTERY1 + SysCtrl.bat_charge_idx);
 	}
 	else if (SysCtrl.battery == BATTERY_STAT_4)
 		winSetResid(winItem(handle, MAINMENU_BATTERY_ID), R_ID_ICON_MTBATTERY4);

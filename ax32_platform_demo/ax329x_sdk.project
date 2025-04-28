@@ -364,6 +364,13 @@
     <VirtualDirectory Name="watermark">
       <File Name="../multimedia/watermark/image_watermark.h"/>
     </VirtualDirectory>
+    <VirtualDirectory Name="unifont">
+      <File Name="../multimedia/unifont/ebook.h"/>
+      <File Name="../multimedia/unifont/ebook_font.c"/>
+      <File Name="../multimedia/unifont/ebook_font.h"/>
+      <File Name="../multimedia/unifont/ebook_port.c"/>
+      <File Name="../multimedia/unifont/ebook_type.h"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="device">
     <VirtualDirectory Name="coms_sensor">
@@ -383,6 +390,8 @@
       <File Name="../device/cmos_sensor/SENSOR_SIV100B.c"/>
       <File Name="../device/tft_lcd/lcd_mcu_st7789P3.c"/>
       <File Name="../device/cmos_sensor/SENSOR_BF20A6.c"/>
+      <File Name="../device/cmos_sensor/SENSOR_OV7725.c"/>
+      <File Name="../device/cmos_sensor/SENSOR_SP0718.c"/>
     </VirtualDirectory>
     <VirtualDirectory Name="tft_lcd">
       <File Name="../device/tft_lcd/tft_lcd.h"/>
@@ -393,6 +402,21 @@
       <File Name="../device/tft_lcd/lcd_mcu_hx8352c.c"/>
       <File Name="../device/tft_lcd/lcd_mcu_9225G.c"/>
       <File Name="../device/tft_lcd/lcd_mcu_nv3030b.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_5420.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_gc9307.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_hx8352b.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_hx8357b.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_lgdp4532.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_r61509v.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_st7789_666format.c"/>
+      <File Name="../device/tft_lcd/lcd_mcu_st7789v2.c"/>
+      <File Name="../device/tft_lcd/lcd_rgb_ili8961.c"/>
+      <File Name="../device/tft_lcd/lcd_rgb_ili9342c.c"/>
+      <File Name="../device/tft_lcd/lcd_rgb_ili9806e.c"/>
+      <File Name="../device/tft_lcd/lcd_rgb_jl_lcd.c"/>
+      <File Name="../device/tft_lcd/lcd_rgb_ota5182.c"/>
+      <File Name="../device/tft_lcd/lcd_rgb_st7282.c"/>
+      <File Name="../device/tft_lcd/lcd_rgb_st7701.c"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="bwlib">

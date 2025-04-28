@@ -13,7 +13,7 @@ CurrentFileName        :=
 CurrentFilePath        :=
 CurrentFileFullPath    :=
 User                   :=jingcheng.huang
-Date                   :=2025/4/17
+Date                   :=2025/4/28
 CodeLitePath           :="c:\program files (x86)\codelite"
 LinkerName             :=C:/MinGW-4.7.1/bin/or1k-elf-ld.exe
 SharedObjectLinkerName :=C:/MinGW-4.7.1/bin/or1k-elf-g++.exe -shared -fPIC
@@ -85,15 +85,19 @@ Objects2=$(IntermediateDirectory)/lcd_ax32xx_lcd.c$(ObjectSuffix) $(Intermediate
 	$(IntermediateDirectory)/dusb_hal_usb_uvc.c$(ObjectSuffix) $(IntermediateDirectory)/audio_audio_playback.c$(ObjectSuffix) $(IntermediateDirectory)/audio_audio_record.c$(ObjectSuffix) $(IntermediateDirectory)/audio_ring_buffer.c$(ObjectSuffix) $(IntermediateDirectory)/video_video_playback.c$(ObjectSuffix) $(IntermediateDirectory)/video_video_record.c$(ObjectSuffix) $(IntermediateDirectory)/image_image_decode.c$(ObjectSuffix) $(IntermediateDirectory)/image_image_encode.c$(ObjectSuffix) $(IntermediateDirectory)/wav_alaw.c$(ObjectSuffix) $(IntermediateDirectory)/wav_imaadpcm.c$(ObjectSuffix) \
 	$(IntermediateDirectory)/wav_pcm.c$(ObjectSuffix) $(IntermediateDirectory)/wav_ulaw.c$(ObjectSuffix) $(IntermediateDirectory)/wav_wav.c$(ObjectSuffix) 
 
-Objects3=$(IntermediateDirectory)/stream_stream.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_cmos_sensor.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF3a03.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF2013.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF3703.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0307.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0308.c$(ObjectSuffix) \
-	$(IntermediateDirectory)/cmos_sensor_SENSOR_GC0309.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0328.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_OV7670.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0838.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0A18.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0329.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SIV100B.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789P3.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix) \
-	$(IntermediateDirectory)/tft_lcd_tft_lcd.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_ili9328.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352c.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_9225G.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_nv3030b.c$(ObjectSuffix) $(IntermediateDirectory)/nvfs_nvfs.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_max_user.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_uiDraw.c$(ObjectSuffix) $(IntermediateDirectory)/std_misc.c$(ObjectSuffix) \
-	$(IntermediateDirectory)/std_std_math.c$(ObjectSuffix) $(IntermediateDirectory)/std_str.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default_draw.c$(ObjectSuffix) $(IntermediateDirectory)/res_R.c$(ObjectSuffix) $(IntermediateDirectory)/res_R_icon.c$(ObjectSuffix) $(IntermediateDirectory)/res_R_string.c$(ObjectSuffix) $(IntermediateDirectory)/res_unicode_font.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_num3.c$(ObjectSuffix) \
-	$(IntermediateDirectory)/res_ascii_num3_draw.c$(ObjectSuffix) 
+Objects3=$(IntermediateDirectory)/stream_stream.c$(ObjectSuffix) $(IntermediateDirectory)/unifont_ebook_font.c$(ObjectSuffix) $(IntermediateDirectory)/unifont_ebook_port.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_cmos_sensor.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF3a03.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF2013.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF3703.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/cmos_sensor_SENSOR_GC0307.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0308.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0309.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0328.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_OV7670.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0838.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0A18.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_GC0329.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SIV100B.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789P3.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(ObjectSuffix) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_tft_lcd.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_ili9328.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352c.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_9225G.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_nv3030b.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(ObjectSuffix) $(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(ObjectSuffix) $(IntermediateDirectory)/nvfs_nvfs.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_max_user.c$(ObjectSuffix) $(IntermediateDirectory)/Maxlib_uiDraw.c$(ObjectSuffix) $(IntermediateDirectory)/std_misc.c$(ObjectSuffix) $(IntermediateDirectory)/std_std_math.c$(ObjectSuffix) \
+	$(IntermediateDirectory)/std_str.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_default_draw.c$(ObjectSuffix) $(IntermediateDirectory)/res_R.c$(ObjectSuffix) $(IntermediateDirectory)/res_R_icon.c$(ObjectSuffix) 
+
+Objects4=$(IntermediateDirectory)/res_R_string.c$(ObjectSuffix) $(IntermediateDirectory)/res_unicode_font.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_num3.c$(ObjectSuffix) $(IntermediateDirectory)/res_ascii_num3_draw.c$(ObjectSuffix) \
+	
 
 
 
-Objects=$(Objects0) $(Objects1) $(Objects2) $(Objects3) 
+Objects=$(Objects0) $(Objects1) $(Objects2) $(Objects3) $(Objects4) 
 
 ##
 ## Main Build Targets 
@@ -108,6 +112,7 @@ $(OutputFile): $(IntermediateDirectory)/.d $(Objects)
 	@echo $(Objects1) >> $(ObjectsFileList)
 	@echo $(Objects2) >> $(ObjectsFileList)
 	@echo $(Objects3) >> $(ObjectsFileList)
+	@echo $(Objects4) >> $(ObjectsFileList)
 	$(LinkerName) $(OutputSwitch)$(OutputFile) @$(ObjectsFileList) $(LibPath) $(Libs) $(LinkOptions)
 
 PostBuild:
@@ -1520,6 +1525,22 @@ $(IntermediateDirectory)/stream_stream.c$(DependSuffix): ../multimedia/stream/st
 $(IntermediateDirectory)/stream_stream.c$(PreprocessSuffix): ../multimedia/stream/stream.c
 	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/stream_stream.c$(PreprocessSuffix) "../multimedia/stream/stream.c"
 
+$(IntermediateDirectory)/unifont_ebook_font.c$(ObjectSuffix): ../multimedia/unifont/ebook_font.c $(IntermediateDirectory)/unifont_ebook_font.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/multimedia/unifont/ebook_font.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/unifont_ebook_font.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/unifont_ebook_font.c$(DependSuffix): ../multimedia/unifont/ebook_font.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/unifont_ebook_font.c$(ObjectSuffix) -MF$(IntermediateDirectory)/unifont_ebook_font.c$(DependSuffix) -MM "../multimedia/unifont/ebook_font.c"
+
+$(IntermediateDirectory)/unifont_ebook_font.c$(PreprocessSuffix): ../multimedia/unifont/ebook_font.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/unifont_ebook_font.c$(PreprocessSuffix) "../multimedia/unifont/ebook_font.c"
+
+$(IntermediateDirectory)/unifont_ebook_port.c$(ObjectSuffix): ../multimedia/unifont/ebook_port.c $(IntermediateDirectory)/unifont_ebook_port.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/multimedia/unifont/ebook_port.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/unifont_ebook_port.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/unifont_ebook_port.c$(DependSuffix): ../multimedia/unifont/ebook_port.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/unifont_ebook_port.c$(ObjectSuffix) -MF$(IntermediateDirectory)/unifont_ebook_port.c$(DependSuffix) -MM "../multimedia/unifont/ebook_port.c"
+
+$(IntermediateDirectory)/unifont_ebook_port.c$(PreprocessSuffix): ../multimedia/unifont/ebook_port.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/unifont_ebook_port.c$(PreprocessSuffix) "../multimedia/unifont/ebook_port.c"
+
 $(IntermediateDirectory)/cmos_sensor_cmos_sensor.c$(ObjectSuffix): ../device/cmos_sensor/cmos_sensor.c $(IntermediateDirectory)/cmos_sensor_cmos_sensor.c$(DependSuffix)
 	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/cmos_sensor/cmos_sensor.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/cmos_sensor_cmos_sensor.c$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/cmos_sensor_cmos_sensor.c$(DependSuffix): ../device/cmos_sensor/cmos_sensor.c
@@ -1640,6 +1661,22 @@ $(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(DependSuffix): ../device/c
 $(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(PreprocessSuffix): ../device/cmos_sensor/SENSOR_BF20A6.c
 	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/cmos_sensor_SENSOR_BF20A6.c$(PreprocessSuffix) "../device/cmos_sensor/SENSOR_BF20A6.c"
 
+$(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(ObjectSuffix): ../device/cmos_sensor/SENSOR_OV7725.c $(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/cmos_sensor/SENSOR_OV7725.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(DependSuffix): ../device/cmos_sensor/SENSOR_OV7725.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(ObjectSuffix) -MF$(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(DependSuffix) -MM "../device/cmos_sensor/SENSOR_OV7725.c"
+
+$(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(PreprocessSuffix): ../device/cmos_sensor/SENSOR_OV7725.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/cmos_sensor_SENSOR_OV7725.c$(PreprocessSuffix) "../device/cmos_sensor/SENSOR_OV7725.c"
+
+$(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(ObjectSuffix): ../device/cmos_sensor/SENSOR_SP0718.c $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/cmos_sensor/SENSOR_SP0718.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(DependSuffix): ../device/cmos_sensor/SENSOR_SP0718.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(ObjectSuffix) -MF$(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(DependSuffix) -MM "../device/cmos_sensor/SENSOR_SP0718.c"
+
+$(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(PreprocessSuffix): ../device/cmos_sensor/SENSOR_SP0718.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/cmos_sensor_SENSOR_SP0718.c$(PreprocessSuffix) "../device/cmos_sensor/SENSOR_SP0718.c"
+
 $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_st7789.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(DependSuffix)
 	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_st7789.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(ObjectSuffix) $(IncludePath)
 $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_st7789.c
@@ -1695,6 +1732,126 @@ $(IntermediateDirectory)/tft_lcd_lcd_mcu_nv3030b.c$(DependSuffix): ../device/tft
 
 $(IntermediateDirectory)/tft_lcd_lcd_mcu_nv3030b.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_nv3030b.c
 	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_nv3030b.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_nv3030b.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_5420.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_5420.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_5420.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_5420.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_5420.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_5420.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_5420.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_gc9307.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_gc9307.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_gc9307.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_gc9307.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_gc9307.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_gc9307.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_gc9307.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_hx8352b.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_hx8352b.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_hx8352b.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_hx8352b.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_hx8352b.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8352b.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_hx8352b.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_hx8357b.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_hx8357b.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_hx8357b.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_hx8357b.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_hx8357b.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_hx8357b.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_hx8357b.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_lgdp4532.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_lgdp4532.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_lgdp4532.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_lgdp4532.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_lgdp4532.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_lgdp4532.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_lgdp4532.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_r61509v.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_r61509v.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_r61509v.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_r61509v.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_r61509v.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_r61509v.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_r61509v.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_st7789_666format.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_st7789_666format.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_st7789_666format.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_st7789_666format.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_st7789_666format.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789_666format.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_st7789_666format.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(ObjectSuffix): ../device/tft_lcd/lcd_mcu_st7789v2.c $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_mcu_st7789v2.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(DependSuffix): ../device/tft_lcd/lcd_mcu_st7789v2.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(DependSuffix) -MM "../device/tft_lcd/lcd_mcu_st7789v2.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(PreprocessSuffix): ../device/tft_lcd/lcd_mcu_st7789v2.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_mcu_st7789v2.c$(PreprocessSuffix) "../device/tft_lcd/lcd_mcu_st7789v2.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(ObjectSuffix): ../device/tft_lcd/lcd_rgb_ili8961.c $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_rgb_ili8961.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(DependSuffix): ../device/tft_lcd/lcd_rgb_ili8961.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(DependSuffix) -MM "../device/tft_lcd/lcd_rgb_ili8961.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(PreprocessSuffix): ../device/tft_lcd/lcd_rgb_ili8961.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili8961.c$(PreprocessSuffix) "../device/tft_lcd/lcd_rgb_ili8961.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(ObjectSuffix): ../device/tft_lcd/lcd_rgb_ili9342c.c $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_rgb_ili9342c.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(DependSuffix): ../device/tft_lcd/lcd_rgb_ili9342c.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(DependSuffix) -MM "../device/tft_lcd/lcd_rgb_ili9342c.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(PreprocessSuffix): ../device/tft_lcd/lcd_rgb_ili9342c.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9342c.c$(PreprocessSuffix) "../device/tft_lcd/lcd_rgb_ili9342c.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(ObjectSuffix): ../device/tft_lcd/lcd_rgb_ili9806e.c $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_rgb_ili9806e.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(DependSuffix): ../device/tft_lcd/lcd_rgb_ili9806e.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(DependSuffix) -MM "../device/tft_lcd/lcd_rgb_ili9806e.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(PreprocessSuffix): ../device/tft_lcd/lcd_rgb_ili9806e.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_rgb_ili9806e.c$(PreprocessSuffix) "../device/tft_lcd/lcd_rgb_ili9806e.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(ObjectSuffix): ../device/tft_lcd/lcd_rgb_jl_lcd.c $(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_rgb_jl_lcd.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(DependSuffix): ../device/tft_lcd/lcd_rgb_jl_lcd.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(DependSuffix) -MM "../device/tft_lcd/lcd_rgb_jl_lcd.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(PreprocessSuffix): ../device/tft_lcd/lcd_rgb_jl_lcd.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_rgb_jl_lcd.c$(PreprocessSuffix) "../device/tft_lcd/lcd_rgb_jl_lcd.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(ObjectSuffix): ../device/tft_lcd/lcd_rgb_ota5182.c $(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_rgb_ota5182.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(DependSuffix): ../device/tft_lcd/lcd_rgb_ota5182.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(DependSuffix) -MM "../device/tft_lcd/lcd_rgb_ota5182.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(PreprocessSuffix): ../device/tft_lcd/lcd_rgb_ota5182.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_rgb_ota5182.c$(PreprocessSuffix) "../device/tft_lcd/lcd_rgb_ota5182.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(ObjectSuffix): ../device/tft_lcd/lcd_rgb_st7282.c $(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_rgb_st7282.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(DependSuffix): ../device/tft_lcd/lcd_rgb_st7282.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(DependSuffix) -MM "../device/tft_lcd/lcd_rgb_st7282.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(PreprocessSuffix): ../device/tft_lcd/lcd_rgb_st7282.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_rgb_st7282.c$(PreprocessSuffix) "../device/tft_lcd/lcd_rgb_st7282.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(ObjectSuffix): ../device/tft_lcd/lcd_rgb_st7701.c $(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(DependSuffix)
+	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/device/tft_lcd/lcd_rgb_st7701.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(ObjectSuffix) $(IncludePath)
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(DependSuffix): ../device/tft_lcd/lcd_rgb_st7701.c
+	@$(CC) $(CFLAGS) $(IncludePath) -MG -MP -MT$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(ObjectSuffix) -MF$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(DependSuffix) -MM "../device/tft_lcd/lcd_rgb_st7701.c"
+
+$(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(PreprocessSuffix): ../device/tft_lcd/lcd_rgb_st7701.c
+	@$(CC) $(CFLAGS) $(IncludePath) $(PreprocessOnlySwitch) $(OutputSwitch) $(IntermediateDirectory)/tft_lcd_lcd_rgb_st7701.c$(PreprocessSuffix) "../device/tft_lcd/lcd_rgb_st7701.c"
 
 $(IntermediateDirectory)/nvfs_nvfs.c$(ObjectSuffix): ../bwlib/nvfs/nvfs.c $(IntermediateDirectory)/nvfs_nvfs.c$(DependSuffix)
 	$(CC) $(SourceSwitch) "C:/Users/jingcheng.huang/Desktop/LB-AX3295B_Addwatermark/bwlib/nvfs/nvfs.c" $(CFLAGS) $(ObjectSwitch)$(IntermediateDirectory)/nvfs_nvfs.c$(ObjectSuffix) $(IncludePath)

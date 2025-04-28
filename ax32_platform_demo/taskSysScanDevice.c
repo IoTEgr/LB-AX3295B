@@ -116,10 +116,10 @@ void taskSysScanDev(uint32 scanKey)
 		deamon_screen_save(0);	 // system check,no event
 								 //--------auto power off check----------
 		deamon_auto_poweroff(0); // auto power off check
-		//--------astern mode check-----------
-		// deamon_astern_check(); // astern stat check
-		//--------ir auto check-------------
-		// deamon_ir_auto_check();
+								 //--------astern mode check-----------
+								 // deamon_astern_check(); // astern stat check
+								 //--------ir auto check-------------
+								 // deamon_ir_auto_check();
 	}
 	//--------usb check---------------------
 	deamon_usb_check(); // usb state check
@@ -209,36 +209,27 @@ void deamon_fs_scan(void)
 {
 	deg_Printf("deamon : fs mount start.%d\n", XOSTimeGet());
 
-	char string[16];
-#if (AUDIO_REC_EN == 1)
-	strcpy(string, FILEDIR_AUDIO);
-	string[strlen(string) - 1] = 0;
-	f_mkdir((const TCHAR *)string); // FILEDIR_AUDIO);
-#endif
-	strcpy(string, FILEDIR_VIDEOA);
-	string[strlen(string) - 1] = 0;
-	f_mkdir((const TCHAR *)string); // FILEDIR_VIDEO);
-
-#if (1 == AVI_LOCK_FOLDER)
-	strcpy(string, FILEDIR_LOCKA);
-	string[strlen(string) - 1] = 0;
-	f_mkdir((const TCHAR *)string);
-	strcpy(string, FILEDIR_LOCKB);
-	string[strlen(string) - 1] = 0;
-	f_mkdir((const TCHAR *)string);
-#endif
-
+	TCHAR string[16];
+	// strcpy(string,FILEDIR_AUDIO);
+	// string[strlen(string)-1] = 0;
+	//_f_mkdir((const TCHAR*)string);//FILEDIR_AUDIO);
+	//	strcpy(string,FILEDIR_VIDEOA);
+	//	string[strlen(string)-1] = 0;
+	Ascii2Tchar(FILEDIR_VIDEOA, string, sizeof(string) / sizeof(string[0]));
+	f_mkdir(string); // FILEDIR_VIDEO);
 #if RECORD_MODE == RECORD_MODE_DEFAULT
-	strcpy(string, FILEDIR_VIDEOB);
-	string[strlen(string) - 1] = 0;
-	f_mkdir((const TCHAR *)string); // FILEDIR_VIDEO);
+	//	strcpy(string,FILEDIR_VIDEOB);
+	//	string[strlen(string)-1] = 0;
+	Ascii2Tchar(FILEDIR_VIDEOB, string, sizeof(string) / sizeof(string[0]));
+	f_mkdir(string); // FILEDIR_VIDEO);
 	SysCtrl.bfolder = 1;
 #elif RECORD_MODE == RECORD_MODE_AUTO
 	if (SysCtrl.usensor != USENSOR_STAT_NULL)
 	{
-		strcpy(string, FILEDIR_VIDEOB);
-		string[strlen(string) - 1] = 0;
-		f_mkdir((const TCHAR *)string); // FILEDIR_VIDEO);
+		//		strcpy(string,FILEDIR_VIDEOB);
+		//		string[strlen(string)-1] = 0;
+		Ascii2Tchar(FILEDIR_VIDEOB, string, sizeof(string) / sizeof(string[0]));
+		f_mkdir(string); // FILEDIR_VIDEO);
 		SysCtrl.bfolder = 1;
 	}
 	else
@@ -247,14 +238,15 @@ void deamon_fs_scan(void)
 	// no B floder
 	SysCtrl.bfolder = 0;
 #endif
+	//	strcpy(string,FILEDIR_PHOTO);
+	//	string[strlen(string)-1] = 0;
+	Ascii2Tchar(FILEDIR_PHOTO, string, sizeof(string) / sizeof(string[0]));
+	f_mkdir(string); // FILEDIR_PHOTO);
 
-	strcpy(string, FILEDIR_PHOTO);
-	string[strlen(string) - 1] = 0;
-	f_mkdir((const TCHAR *)string); // FILEDIR_PHOTO);
-
-	strcpy(string, FILEDIR_MP3);
-	string[strlen(string) - 1] = 0;
-	f_mkdir((const TCHAR *)string);
+	//	strcpy(string,FILEDIR_MP3);
+	//	string[strlen(string)-1] = 0;
+	Ascii2Tchar(FILEDIR_MP3, string, sizeof(string) / sizeof(string[0]));
+	f_mkdir(string);
 
 	hal_sdStop();
 
@@ -262,29 +254,25 @@ void deamon_fs_scan(void)
 	deg_Printf("deamon : fs cluster size.%d B\n", SysCtrl.fs_clustsize);
 	SysCtrl.sdcard = SDC_STAT_NORMAL;
 	XMsgQPost(SysCtrl.sysQ, (void *)makeEvent(SYS_EVENT_SDC, 0));
+
+#if 1
 	if (SysCtrl.avi_list < 0) // scan file list
 	{
 		SysCtrl.avi_list = managerCreate(FILEDIR_VIDEO, MA_FILE_AVI, -1);
 		SysCtrl.jpg_list = managerCreate(FILEDIR_VIDEO, MA_FILE_JPG, SysCtrl.avi_list);	  // using the same list with avi_list
 		SysCtrl.avia_list = managerCreate(FILEDIR_VIDEO, MA_FILE_AVIA, SysCtrl.avi_list); // using the same list with avi_list
-		// SysCtrl.avib_list = managerCreate(FILEDIR_VIDEO,MA_FILE_AVIB,SysCtrl.avi_list); // using the same list with avi_list
+		SysCtrl.avib_list = managerCreate(FILEDIR_VIDEO, MA_FILE_AVIB, SysCtrl.avi_list); // using the same list with avi_list
 		managerScanStart(SysCtrl.avi_list);
 		managerFileScan(SysCtrl.avi_list, FILEDIR_VIDEOA);
-// managerFileScan(SysCtrl.avi_list,FILEDIR_VIDEOB);
-#if (1 == AVI_LOCK_FOLDER)
-		managerFileScan(SysCtrl.avi_list, FILEDIR_LOCKA);
-// managerFileScan(SysCtrl.avi_list,FILEDIR_LOCKB);
-#endif
-
+		// managerFileScan(SysCtrl.avi_list,FILEDIR_VIDEOB);
 		if (strcmp(FILEDIR_PHOTO, FILEDIR_VIDEO) != 0)
 			managerFileScan(SysCtrl.jpg_list, FILEDIR_PHOTO);
 		managerScanEnd(SysCtrl.avi_list);
 	}
-#if (AUDIO_REC_EN == 1)
+
 	if (SysCtrl.wav_list < 0)
 	{
 		SysCtrl.wav_list = managerCreate(FILEDIR_AUDIO, MA_FILE_WAV, -1);
-		deg_Printf("SysCtrl.wav_list %d\n", SysCtrl.wav_list);
 		managerScanStart(SysCtrl.wav_list);
 		managerFileScan(SysCtrl.wav_list, FILEDIR_AUDIO);
 		managerScanEnd(SysCtrl.wav_list);

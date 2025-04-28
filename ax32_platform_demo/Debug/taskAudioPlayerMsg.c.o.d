@@ -97,7 +97,9 @@ Debug/taskAudioPlayerMsg.c.o: taskAudioPlayerMsg.c application.h \
  ../sUI/uiAlloc.h ../sUI/dialog.h ../sUI/frameWin.h ../sUI/imageIcon.h \
  ../sUI/stringIcon.h ../sUI/rect.h ../sUI/itemManage.h ../sUI/menuItem.h \
  ../sUI/menuOption.h ../sUI/progressBar.h ../sUI/menuItemEx.h \
- ../sUI/widgetManage.h menu.h taskAudioPlayerRes.c
+ ../sUI/widgetManage.h menu.h ../multimedia/mp3/inc/mp3_decode_api.h \
+ ../multimedia/unifont/ebook.h ../multimedia/unifont/ebook_type.h \
+ taskAudioPlayerRes.c
 
 application.h:
 
@@ -462,5 +464,11 @@ uiWin.h:
 ../sUI/widgetManage.h:
 
 menu.h:
+
+../multimedia/mp3/inc/mp3_decode_api.h:
+
+../multimedia/unifont/ebook.h:
+
+../multimedia/unifont/ebook_type.h:
 
 taskAudioPlayerRes.c:

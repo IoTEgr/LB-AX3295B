@@ -202,6 +202,9 @@
 "The Goonies"
 "Racing Cycle"
 "SPI is full"
+"Music List"
+"Music time"
+
 "English"
 "简体中文"
 "繁体中文"
@@ -406,6 +409,8 @@
 "七宝奇谋"
 "公路赛车"
 "SPI已满"
+"音乐列表"
+"时长"
 
 "English"
 "简体中文"

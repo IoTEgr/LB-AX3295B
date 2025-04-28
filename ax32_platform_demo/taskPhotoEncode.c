@@ -92,36 +92,40 @@ int task_image_createfile(int channel, char **filename)
 {
 	int fHandle, ret;
 	char *name;
+	TCHAR fname[64];
 
 	if (SysCtrl.sdcard != SDC_STAT_NORMAL)
 	{
 		XMsgQPost(SysCtrl.sysQ, (void *)makeEvent(SYS_EVENT_SDC, 0));
 		return -1;
 	}
+
 	ret = managerSpaceCheck(SysCtrl.jpg_list, FILEDIR_PHOTO, 1024 * 5);
+	deg_Printf("in photo:show ret[%d]\n", ret);
 	if (ret < 0)
 	{
+		deg_Printf("sd card full\n");
 		SysCtrl.sdcard = SDC_STAT_FULL;
-		picSum = 0;
 		XMsgQPost(SysCtrl.sysQ, (void *)makeEvent(SYS_EVENT_SDC, 0));
 		return -2;
 	}
 	//---------creater file name
 	name = managerFileNameCreater(SysCtrl.jpg_list, SUFFIX_JPG, FILEDIR_PHOTO);
+	deg_Printf("photo : create file name:%s\n", name);
 	if (name == NULL)
 	{
 		deg_Printf("photo : create file name fail.\n");
 		SysCtrl.sdcard = SDC_STAT_FULL;
-		picSum = 0;
 		XMsgQPost(SysCtrl.sysQ, (void *)makeEvent(SYS_EVENT_SDC, 0));
 		return -2;
 	}
 	//---------open file from file system
 	hal_sdLock();
-	fHandle = open(name, FA_CREATE_NEW | FA_WRITE | FA_READ);
+	Ascii2Tchar(name, fname, sizeof(fname) / sizeof(fname[0]));
+	fHandle = open(/*name*/ fname, FA_CREATE_NEW | FA_WRITE | FA_READ);
 	if (fHandle < 0)
 	{
-		deg_Printf("photo : open file fail.%s\n", name);
+		deg_Printf("photo : open file fail.%s\n", fname);
 
 		ret = -3;
 	}
@@ -198,23 +202,25 @@ int image_take_photo(void)
 			goto TAKE_PHOTO_END;
 		yuv_rgb_table_init();
 		watermark_bmp2yuv_init(ST_PIXEL_W, ST_PIXEL_H, SM_PIC_ST_NUM);
-		// watermark_bmp2yuv_init(ST_PIXEL_W, ST_PIXEL_H, SM_PIC_ST_NUM);
-		//  ret = imageEncodeStart((FHANDLE)fHandle,width,height,q,timestramp,frame_enable);
-		if (configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_16M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_18M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_20M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_24M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_40M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_48M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_12M)
-		{ // configGet(CONFIG_ID_PRESLUTION)==R_ID_STR_RES_20M || configGet(CONFIG_ID_PRESLUTION)==R_ID_STR_RES_48M){
+		deg_Printf("-------------------have mem init after %d-------------------\n", hal_sysMemRemain());
+		if (configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_12M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_16M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_18M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_20M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_24M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_40M || configGet(CONFIG_ID_PRESLUTION) == R_ID_STR_RES_48M)
+		{
 			ret = imageEncodeQuadStart(name, (FHANDLE)fHandle, width, height, JPEG_Q_27, timestramp, frame_enable);
 		}
 		else
 		{
-			ret = imageEncodeStart((FHANDLE)fHandle, width, height, JPEG_Q_27, timestramp, frame_enable);
+			ret = imageEncodeStart((FHANDLE)fHandle, width, height, q, timestramp, frame_enable);
 		}
 		watermark_buf_bmp2yuv_free();
 		yuv_rgb_table_uninit();
+		deg_Printf("-------------------have mem after %d-------------------\n", hal_sysMemRemain());
 		if (ret < 0)
 		{
 			deg_Printf("photo : take photo fail.<%d>\n", ret);
+			TCHAR fname[64];
+			Ascii2Tchar(name, fname, sizeof(fname) / sizeof(fname[0]));
 			close((FHANDLE)fHandle);
-			f_unlink(name);
+			f_unlink(/*name*/ fname);
 			ret = -3;
 			goto TAKE_PHOTO_END;
 		}
@@ -300,10 +306,14 @@ int image_take_photo_to_sdram()
 	u16 image_width, image_height;
 	u8 timestramp, q_idx;
 	u8 frame_enable;
+	INT16U width, height;
+
 	hal_watermarkClose(mediaVideoCtrl.tinfo);
 	mediaVideoCtrl.tinfo = hal_watermarkOpen();
 	if (mediaVideoCtrl.tinfo < 0)
 		videor_print("photo watermark open fail:%d\n", mediaVideoCtrl.tinfo);
+
+	task_image_arg(&width, &height, &timestramp);
 
 	timestramp = configValue2Int(CONFIG_ID_TIMESTAMP);
 
@@ -311,37 +321,24 @@ int image_take_photo_to_sdram()
 	image_width = devSensorOp->pixelw;
 	image_height = devSensorOp->pixelh;
 
-	deg_Printf("image_width=%d,image_height=%d\n", image_width, image_height);
-
 	if (videoRecordFrameEnGet())
 		frame_enable = 1;
 	else
 		frame_enable = 0;
 
+	yuv_rgb_table_init();
+	watermark_bmp2yuv_init(ST_PIXEL_W, ST_PIXEL_H, SM_PIC_ST_NUM);
 	hal_mjpegEncodeResolutionImage(image_width, image_height);
+
 	if (hal_mjpegMemInit(1) < 0)
 	{
+		watermark_buf_bmp2yuv_free();
 		deg_Printf("image encode : memory malloc fail\n");
-		return 1;
+		res = -1;
+		goto IMAGE_ENCODE_ERR;
 	}
 
-	if (image_width <= 1280)
-	{
-		q_idx = 7;
-	}
-	else if (image_width <= 2560)
-	{
-		q_idx = 6;
-	}
-	else if (image_width <= 3200)
-	{
-		q_idx = 5;
-	}
-	else
-	{
-		q_idx = 4;
-	}
-	hal_mjpegPhotoStart(image_width, image_height, jpg_encode_q_talbe[q_idx], timestramp, frame_enable);
+	hal_mjpegPhotoStart2(devSensorOp->pixelw, devSensorOp->pixelh, JPEG_Q_81, 0 /*timestramp*/, frame_enable, 1, 1); // didn't crop ,use orig
 	//==wait csi yuv buf ok==
 	timeout = XOSTimeGet();
 	while (1)
@@ -351,19 +348,19 @@ int image_take_photo_to_sdram()
 			break;
 		}
 
-		if ((timeout + 1000) < XOSTimeGet())
+		if ((timeout + 1500) < XOSTimeGet())
 		{
 			res = -2;
-			break;
+			goto IMAGE_ENCODE_ERR;
 		}
 	}
-	//==end wait csi yuv buf ok==
-
 	//==set lcd image stop==
 	delaytime = XOSTimeGet();
 	hal_wdtClear();
 	hal_csiEnable(0);
 	dispLayerSetPIPMode(DISP_PIP_DISABLE);
+
+	//==end set lcd image stop==
 
 	if (SysCtrl.f_keysound)
 	{
@@ -372,67 +369,93 @@ int image_take_photo_to_sdram()
 	while (audioPlaybackGetStatus() == MEDIA_STAT_PLAY)
 		;
 
-	//==end set lcd image stop==
+	//==wait jpg encode==
+	ax32xx_mjpeg_manual_on();
+	ax32xx_intEnable(IRQ_JPGA, 1); // enable jpegirq
 
-	boardIoctrl(SysCtrl.bfd_led, IOCTRL_LED_NO0, 1);
-
-	if (0 == res)
+	if (&mjpegEncCtrl.vids == NULL)
 	{
-		//==software handle yuv buf ==
-		hal_mjpeg_software_handle_csi_yuvbuf();
-		//==end software handle yuv buf ==
-
-		//==wait jpg encode==
-		ax32xx_mjpeg_manual_on();
-		ax32xx_intEnable(IRQ_JPGA, 1); // enable jpegirq
-		timeout = XOSTimeGet();
-		allsize = 0;
-		while (1)
-		{
-			buff = hal_mjpegRawBufferGet(buff, &addr, &size, &sync, &sync_next); // hal_mjpegRawDataGet(&tbuff,&addr,&size);   // get jpeg frame addr & jpeg size.a total frame contains some of small buffers.here is the total size & start buffer addr
-			if (buff)
-			{
-				deg_Printf("image encode : ok\n");
-
-				if (res < 0)
-				{
-					deg_Printf("image encode : error\n");
-					break;
-				}
-				allsize += size;
-				break;
-			}
-			if ((timeout + 2000) < XOSTimeGet())
-			{
-				deg_Printf("image encode : timeout 2 second.\n");
-				res = -3;
-				break;
-			}
-		}
-		//==end wait jpg encode==
+		deg_Printf("no vids frame\r\n");
 	}
+	if (mjpegEncCtrl.curBuffer == NULL)
+		deg_Printf("no curBuffer frame\r\n");
 
+	timeout = XOSTimeGet();
+	while (1)
+	{
+		buff = hal_mjpegRawBufferGet(buff, &addr, &size, &sync, &sync_next); // hal_mjpegRawDataGet(&tbuff,&addr,&size);   // get jpeg frame addr & jpeg size.a total frame contains some of small buffers.here is the total size & start buffer addr
+		if (buff)
+		{
+			// deg_Printf("buff:%x size:%d\r\n",buff,size);
+			break;
+		}
+		if (buff == NULL)
+		{
+			// deg_Printf("bobobob\r\n");
+		}
+		// deg_Printf("buff:%x size:%d\r\n",buff,size);
+		if ((timeout + 3000) < XOSTimeGet())
+		{
+			// deg_Printf("image encode : timeout 2-second.\n");
+			break;
+		}
+	}
+	ax32xx_csiEnable(1);
+	dispLayerSetPIPMode(DISP_PIP_DISABLE);
+	XOSTimeDly(20);
+	u32 ticks = XOSTimeGet();
+	Image_ARG_T arg;
+#if CHANGE_4_3
+	arg.target.width = devSensorOp->pixelw;
+	arg.target.height = devSensorOp->pixelh;
+#else
+	arg.target.width = mjpegEncCtrl.csi_width;
+	arg.target.height = mjpegEncCtrl.csi_height;
+
+#endif
+	arg.yout = (u8 *)mjpegEncCtrl.ybuffer;
+	arg.uvout = (u8 *)mjpegEncCtrl.uvbuffer;
+	arg.media.type = MEDIA_SRC_RAM;
+	arg.media.src.buff = buff;
+	arg.wait = 1; // wait decode end
+	if (imageDecodeStart(&arg) < 0)
+	{
+		deg("jpg decode fail\n");
+	}
+	else
+	{
+		ticks = XOSTimeGet() - ticks;
+		u16 dec_width, dec_height;
+		imageDecodeGetResolution(&dec_width, &dec_height);
+	}
+	hal_csiEnable(1);
+	dispLayerSetPIPMode(SysCtrl.pip_mode);
+	hal_mjpeg_software_handle_csi_yuvbuf();
+	if (timestramp)
+	{
+		watermark_bmp2yuv_draw((u8 *)mjpegEncCtrl.ybuffer, WATERMAKE_SET_X_POS, WATERMAKE_SET_Y_POS, WATER_CHAR_GAP);
+		deg_Printf("add watermark finish \n");
+	}
+	hal_mjpegRawDataSet(buff);
+	hal_mjpegPhotoStart2(image_width, image_height, JPEG_Q_81, 0 /*timestramp*/, frame_enable, 0, 0); // didn't crop ,use orig
+
+	u32 jpg_addr;
+
+ENCODE_AGAIN:
+	//==scale down image handle==
+	res = hal_mjpg_scale_down((u8 *)addr, 320, 240, JPEG_Q_81, &jpg_addr, &size);
+	deg_Printf("res=%d,%d\n", res, size);
 	if (0 == res)
 	{
-		u32 jpg_addr;
-
-	ENCODE_AGAIN:
-		//==scale down image handle==
-		res = hal_mjpg_scale_down((u8 *)addr, 320, 240, jpg_encode_q_talbe[q_idx], &jpg_addr, &size);
-		deg_Printf("res=%d,%d\n", res, size);
-		if (0 == res)
+		if (size > FLASH_UDISK_JPG_SIZE)
 		{
-			if (size > FLASH_UDISK_JPG_SIZE)
+			if (q_idx > 0)
 			{
-				if (q_idx > 0)
-				{
-					q_idx--;
-				}
-				goto ENCODE_AGAIN;
+				q_idx--;
 			}
-			spi_udisk_write_jpg((u8 *)jpg_addr, size);
+			goto ENCODE_AGAIN;
 		}
-		//==end scale down image handle==
+		spi_udisk_write_jpg((u8 *)jpg_addr, size);
 	}
 
 	//==lcd image active==
@@ -458,11 +481,15 @@ int image_take_photo_to_sdram()
 
 	boardIoctrl(SysCtrl.bfd_led, IOCTRL_LED_NO0, 1);
 
+IMAGE_ENCODE_ERR:
+
 	hal_mjpegEncodeStop();
 
 	if (timestramp)
 		videoRecordImageWatermark(image_width, image_height, 0); // disable
 
+	watermark_buf_bmp2yuv_free();
+	yuv_rgb_table_uninit();
 	return res;
 }
 void photo_animation_effect(UserInterface name, uint8 flag)
@@ -505,6 +532,7 @@ void photo_animation_effect(UserInterface name, uint8 flag)
 
 void taskPhotoEncodeOpen(uint32 arg1)
 {
+	deg_Printf("-------------------have mem begin %d-----------------\n", hal_sysMemRemain());
 	UserInterface photoAnimation;
 	ANIMATION(photoAnimation, SQUARE_INSIDE2OUTSIDE)
 
@@ -621,7 +649,7 @@ void taskPhotoEncodeClose(uint32 arg)
 	}
 
 	hal_custom_frame_unit();
-
+	deg_Printf("-------------------have mem end %d-----------------\n", hal_sysMemRemain());
 	deg_Printf("image encode task exit.\n");
 }
 sysTask taskPhotoEncode =

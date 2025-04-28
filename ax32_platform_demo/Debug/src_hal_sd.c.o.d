@@ -58,7 +58,8 @@ Debug/src_hal_sd.c.o: ../hal/src/hal_sd.c ../hal/src/../inc/hal.h \
  ../hal/src/../inc/../dusb/hal_usb_dev_enum.h \
  ../hal/src/../inc/../dusb/hal_usb_msc.h \
  ../hal/src/../inc/../dusb/hal_usb_uac.h \
- ../hal/src/../inc/../dusb/hal_usb_uvc.h ../hal/src/../inc/hal_sys.h
+ ../hal/src/../inc/../dusb/hal_usb_uvc.h ../hal/src/../inc/hal_sys.h \
+ ../xos/xos.h
 
 ../hal/src/../inc/hal.h:
 
@@ -217,3 +218,5 @@ Debug/src_hal_sd.c.o: ../hal/src/hal_sd.c ../hal/src/../inc/hal.h \
 ../hal/src/../inc/../dusb/hal_usb_uvc.h:
 
 ../hal/src/../inc/hal_sys.h:
+
+../xos/xos.h:
