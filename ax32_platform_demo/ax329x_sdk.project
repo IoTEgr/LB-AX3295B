@@ -124,6 +124,8 @@
       <File Name="inc/font.h"/>
       <File Name="inc/icon.h"/>
       <File Name="inc/resource_manager.h"/>
+      <File Name="inc/gif.h"/>
+      <File Name="inc/GifDecoder.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="resource">
       <File Name="resource/r_palette.h"/>
@@ -202,6 +204,9 @@
     <File Name="taskGameMenuRes.c"/>
     <File Name="game_plane.c"/>
     <File Name="game_maze.c"/>
+    <File Name="gif.c"/>
+    <File Name="GifDecoder_Impl.c"/>
+    <File Name="LzwDecoder_Impl.c"/>
   </VirtualDirectory>
   <VirtualDirectory Name="hal">
     <VirtualDirectory Name="src">

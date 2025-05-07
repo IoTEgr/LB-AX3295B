@@ -24,7 +24,7 @@
 #define HAL_CFG_H
 
 // debug uart output
-#define HAL_CFG_EN_DBG 0 // debug printf
+#define HAL_CFG_EN_DBG 1 // debug printf
 
 // mcu moudle function
 #define HAL_CFG_EN_IIC0 1

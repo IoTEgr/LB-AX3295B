@@ -45,6 +45,8 @@
 #include "./resource/resource.h"
 #include "./inc/font.h"
 #include "./inc/icon.h"
+#include "./inc/gif.h"
+#include "./inc/GifDecoder.h"
 
 #define SYSDEVICE_Q_SIZE 20
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Session Name="C:\Users\jingcheng.huang\Desktop\LB-AX3295B_Addwatermark\ax32_platform_demo\ax329x_sdk.workspace">
+<Session Name="C:\Users\jingcheng.huang\Desktop\project\LB-AX3295B\LB-AX3295B_Addwatermark\ax32_platform_demo\ax329x_sdk.workspace">
   <int Value="0" Name="m_selectedTab"/>
-  <wxString Value="C:\Users\jingcheng.huang\Desktop\LB-AX3295B_Addwatermark\ax32_platform_demo\ax329x_sdk.workspace" Name="m_workspaceName"/>
+  <wxString Value="C:\Users\jingcheng.huang\Desktop\project\LB-AX3295B\LB-AX3295B_Addwatermark\ax32_platform_demo\ax329x_sdk.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray"/>
   <SerializedObject Name="m_breakpoints">
     <long Value="0" Name="Count"/>

@@ -166,24 +166,24 @@ void hal_sysMemPrint(void)
 	while (node)
 	{
 #if HAL_ALLOC_DEBUG
-		if (node->flag)
-		{
-			u8 *p = (u8 *)(node->addr + node->appsize);
-			if (node->line > 0 && (p[0] != 0x55 || p[1] != 0x55 || p[2] != 0x55 || p[3] != 0x55))
-			{
-				uart_Printf("-------OVERFLOW-------\n");
-				uart_Printf("[%s]line=%d,size=%d,[%X %X %X %X]\n", node->func, node->line, node->appsize, p[0], p[1], p[2], p[3]);
-				uart_Printf("----------------------\n");
-			}
-			else
-			{
-				uart_Printf("<HEAP> [%d] %x,%d,%s,%d\n", node->flag, node->addr, node->size, node->func, node->line);
-			}
-		}
-		else
-		{
-			uart_Printf("<HEAP> [%d] %x,%d\n", node->flag, node->addr, node->size);
-		}
+		// if (node->flag)
+		// {
+		// 	u8 *p = (u8 *)(node->addr + node->appsize);
+		// 	if (node->line > 0 && (p[0] != 0x55 || p[1] != 0x55 || p[2] != 0x55 || p[3] != 0x55))
+		// 	{
+		// uart_Printf("-------OVERFLOW-------\n");
+		// uart_Printf("[%s]line=%d,size=%d,[%X %X %X %X]\n", node->func, node->line, node->appsize, p[0], p[1], p[2], p[3]);
+		// uart_Printf("----------------------\n");
+		// 	}
+		// 	else
+		// 	{
+		// 		uart_Printf("<HEAP> [%d] %x,%d,%s,%d\n", node->flag, node->addr, node->size, node->func, node->line);
+		// 	}
+		// }
+		// else
+		// {
+		// 	uart_Printf("<HEAP> [%d] %x,%d\n", node->flag, node->addr, node->size);
+		// }
 #else
 		deg_Printf("HAL : [SYS]<INFO> [%d] %x,%d,\n", node->flag, node->addr, node->size);
 #endif
@@ -239,7 +239,7 @@ void *hal_sysMemMalloc(u32 size, u8 algin)
 #if HAL_ALLOC_DEBUG
 		uart_Printf("<ALLOC>fail:%s,%d,%d\n", func, line, size);
 #endif
-		hal_sysMemPrint();
+		// hal_sysMemPrint();
 		return NULL;
 	}
 	addr = cur->addr;
@@ -288,13 +288,13 @@ void hal_sysMemFree(void *mem)
 	if (cur == NULL) // can not find this address
 		return;
 #if HAL_ALLOC_DEBUG
-	u8 *p = (u8 *)(addr + cur->appsize);
-	if (p[0] != 0x55 || p[1] != 0x55 || p[2] != 0x55 || p[3] != 0x55)
-	{
-		deg_Printf("-------OVERFLOW-------\n");
-		deg_Printf("[%s]line=%d,size=%d,[%X %X %X %X]\n", cur->func, cur->line, cur->appsize, p[0], p[1], p[2], p[3]);
-		deg_Printf("----------------------\n");
-	}
+	// u8 *p = (u8 *)(addr + cur->appsize);
+	// if (p[0] != 0x55 || p[1] != 0x55 || p[2] != 0x55 || p[3] != 0x55)
+	// {
+	// deg_Printf("-------OVERFLOW-------\n");
+	// deg_Printf("[%s]line=%d,size=%d,[%X %X %X %X]\n", cur->func, cur->line, cur->appsize, p[0], p[1], p[2], p[3]);
+	// deg_Printf("----------------------\n");
+	// }
 #endif
 
 	node = cur->next;
