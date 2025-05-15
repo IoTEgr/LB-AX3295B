@@ -75,7 +75,7 @@ static widgetCreateInfor audioPlayerWin[] =
 
 		createStringIcon(AUDIOPLAYER_VOLUME_NUM_ID, Rx(130), Ry(0), Rw(48), Rh(32), strToResId("7"), ALIGNMENT_LEFT, R_COLOR_WHITE, 0),
 		createUniStrIcon(AUDIOPLAYER_LIST_TIPS1_ID, Rx(32), Ry(32), Rw(320 - 64), Rh(28), strToResId(" "), ALIGNMENT_CENTER, R_COLOR_YELLOW, 0),
-		createStringIcon(AUDIOPLAYER_LIST_TIPS2_ID, Rx(32), Ry(32), Rw(320 - 64), Rh(28), R_ID_STR_MUSICNAME, ALIGNMENT_CENTER, R_COLOR_YELLOW, 0),
+		createStringIcon(AUDIOPLAYER_LIST_TIPS2_ID, Rx(32), Ry(32), Rw(320 - 64), Rh(28), R_ID_STR_MUSICLIST, ALIGNMENT_CENTER, R_COLOR_YELLOW, 0),
 		createImageIcon(AUDIOPLAYER_IMAGE_ID, Rx(40), Ry(240 - 85 - 40), Rw(240), Rh(84), R_ID_ICON__MUSIC_1, ALIGNMENT_CENTER),
 //==file list==
 #if MP3_SHOW_MOVE

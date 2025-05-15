@@ -145,6 +145,8 @@ Debug/mjpeg_ax32xx_mjpeg.c.o: ../ax32xx/mjpeg/ax32xx_mjpeg.c \
  ../ax32xx/mjpeg/../../ax32_platform_demo/./resource/r_palette.h \
  ../ax32xx/mjpeg/../../ax32_platform_demo/./inc/font.h \
  ../ax32xx/mjpeg/../../ax32_platform_demo/./inc/icon.h \
+ ../ax32xx/mjpeg/../../ax32_platform_demo/./inc/gif.h \
+ ../ax32xx/mjpeg/../../ax32_platform_demo/./inc/GifDecoder.h \
  ../ax32xx/mjpeg/../../ax32_platform_demo/taskManage.h \
  ../ax32xx/mjpeg/../../ax32_platform_demo/uiWin.h \
  ../ax32xx/mjpeg/../../ax32_platform_demo/../sUI/sUI.h \
@@ -487,6 +489,10 @@ Debug/mjpeg_ax32xx_mjpeg.c.o: ../ax32xx/mjpeg/ax32xx_mjpeg.c \
 ../ax32xx/mjpeg/../../ax32_platform_demo/./inc/font.h:
 
 ../ax32xx/mjpeg/../../ax32_platform_demo/./inc/icon.h:
+
+../ax32xx/mjpeg/../../ax32_platform_demo/./inc/gif.h:
+
+../ax32xx/mjpeg/../../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../ax32xx/mjpeg/../../ax32_platform_demo/taskManage.h:
 

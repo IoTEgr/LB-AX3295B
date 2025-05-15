@@ -154,6 +154,8 @@ Debug/Maxlib_max_user.c.o: ../bwlib/Maxlib/max_user.c \
  ../bwlib/Maxlib/../../ax32_platform_demo/./resource/r_palette.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/./inc/font.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/./inc/icon.h \
+ ../bwlib/Maxlib/../../ax32_platform_demo/./inc/gif.h \
+ ../bwlib/Maxlib/../../ax32_platform_demo/./inc/GifDecoder.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/taskManage.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/uiWin.h \
  ../bwlib/Maxlib/../../ax32_platform_demo/../sUI/sUI.h \
@@ -498,6 +500,10 @@ Debug/Maxlib_max_user.c.o: ../bwlib/Maxlib/max_user.c \
 ../bwlib/Maxlib/../../ax32_platform_demo/./inc/font.h:
 
 ../bwlib/Maxlib/../../ax32_platform_demo/./inc/icon.h:
+
+../bwlib/Maxlib/../../ax32_platform_demo/./inc/gif.h:
+
+../bwlib/Maxlib/../../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../bwlib/Maxlib/../../ax32_platform_demo/taskManage.h:
 

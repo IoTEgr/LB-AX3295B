@@ -103,8 +103,8 @@ Debug/uiMenuItemMsg.c.o: uiMenuItemMsg.c uiMenuItemRes.c uiWin.h \
  ../multimedia/mp3/inc/../../multimedia.h inc/customer.h \
  inc/resource_manager.h inc/config.h inc/board.h inc/display.h \
  resource/resource.h resource/res.h resource/user_icon.h \
- resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h \
- taskManage.h menu.h userInterface.h
+ resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h inc/gif.h \
+ inc/GifDecoder.h taskManage.h menu.h userInterface.h
 
 uiMenuItemRes.c:
 
@@ -467,6 +467,10 @@ resource/r_palette.h:
 inc/font.h:
 
 inc/icon.h:
+
+inc/gif.h:
+
+inc/GifDecoder.h:
 
 taskManage.h:
 

@@ -90,15 +90,15 @@ Debug/taskPhotoEncode.c.o: taskPhotoEncode.c application.h \
  ../multimedia/mp3/inc/../../multimedia.h inc/customer.h \
  inc/resource_manager.h inc/config.h inc/board.h inc/display.h \
  resource/resource.h resource/res.h resource/user_icon.h \
- resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h \
- taskManage.h uiWin.h ../sUI/sUI.h ../sUI/button.h ../sUI/widget.h \
- ../sUI/winManage.h ../sUI/mType.h ../sUI/../hal/inc/hal.h ../sUI/debug.h \
- ../sUI/../ax32xx/inc/typedef.h ../sUI/userDef.h ../sUI/memPool.h \
- ../sUI/uiAlloc.h ../sUI/dialog.h ../sUI/frameWin.h ../sUI/imageIcon.h \
- ../sUI/stringIcon.h ../sUI/rect.h ../sUI/itemManage.h ../sUI/menuItem.h \
- ../sUI/menuOption.h ../sUI/progressBar.h ../sUI/menuItemEx.h \
- ../sUI/widgetManage.h menu.h userInterface.h \
- ../multimedia/imageL/inc/imageL_encode.h \
+ resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h inc/gif.h \
+ inc/GifDecoder.h taskManage.h uiWin.h ../sUI/sUI.h ../sUI/button.h \
+ ../sUI/widget.h ../sUI/winManage.h ../sUI/mType.h \
+ ../sUI/../hal/inc/hal.h ../sUI/debug.h ../sUI/../ax32xx/inc/typedef.h \
+ ../sUI/userDef.h ../sUI/memPool.h ../sUI/uiAlloc.h ../sUI/dialog.h \
+ ../sUI/frameWin.h ../sUI/imageIcon.h ../sUI/stringIcon.h ../sUI/rect.h \
+ ../sUI/itemManage.h ../sUI/menuItem.h ../sUI/menuOption.h \
+ ../sUI/progressBar.h ../sUI/menuItemEx.h ../sUI/widgetManage.h menu.h \
+ userInterface.h ../multimedia/imageL/inc/imageL_encode.h \
  ../multimedia/watermark/image_watermark.h
 
 application.h:
@@ -414,6 +414,10 @@ resource/r_palette.h:
 inc/font.h:
 
 inc/icon.h:
+
+inc/gif.h:
+
+inc/GifDecoder.h:
 
 taskManage.h:
 

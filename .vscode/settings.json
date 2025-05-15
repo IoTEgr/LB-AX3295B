@@ -32,7 +32,8 @@
     "image_watermark.h": "c",
     "menu.h": "c",
     "r.h": "c",
-    "ffconf.h": "c"
+    "ffconf.h": "c",
+    "taskgame.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

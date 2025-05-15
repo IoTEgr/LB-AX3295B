@@ -207,6 +207,7 @@
     <File Name="gif.c"/>
     <File Name="GifDecoder_Impl.c"/>
     <File Name="LzwDecoder_Impl.c"/>
+    <File Name="game_whackamole.c"/>
   </VirtualDirectory>
   <VirtualDirectory Name="hal">
     <VirtualDirectory Name="src">

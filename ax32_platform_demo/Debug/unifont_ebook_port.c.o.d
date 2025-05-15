@@ -156,6 +156,8 @@ Debug/unifont_ebook_port.c.o: ../multimedia/unifont/ebook_port.c \
  ../multimedia/unifont/../../ax32_platform_demo/./resource/r_palette.h \
  ../multimedia/unifont/../../ax32_platform_demo/./inc/font.h \
  ../multimedia/unifont/../../ax32_platform_demo/./inc/icon.h \
+ ../multimedia/unifont/../../ax32_platform_demo/./inc/gif.h \
+ ../multimedia/unifont/../../ax32_platform_demo/./inc/GifDecoder.h \
  ../multimedia/unifont/../../ax32_platform_demo/taskManage.h \
  ../multimedia/unifont/../../ax32_platform_demo/uiWin.h \
  ../multimedia/unifont/../../ax32_platform_demo/../sUI/sUI.h \
@@ -498,6 +500,10 @@ Debug/unifont_ebook_port.c.o: ../multimedia/unifont/ebook_port.c \
 ../multimedia/unifont/../../ax32_platform_demo/./inc/font.h:
 
 ../multimedia/unifont/../../ax32_platform_demo/./inc/icon.h:
+
+../multimedia/unifont/../../ax32_platform_demo/./inc/gif.h:
+
+../multimedia/unifont/../../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../multimedia/unifont/../../ax32_platform_demo/taskManage.h:
 

@@ -138,6 +138,8 @@ Debug/src_hal_custom_yuv.c.o: ../hal/src/hal_custom_yuv.c \
  ../hal/src/../../ax32_platform_demo/./resource/r_palette.h \
  ../hal/src/../../ax32_platform_demo/./inc/font.h \
  ../hal/src/../../ax32_platform_demo/./inc/icon.h \
+ ../hal/src/../../ax32_platform_demo/./inc/gif.h \
+ ../hal/src/../../ax32_platform_demo/./inc/GifDecoder.h \
  ../hal/src/../../ax32_platform_demo/taskManage.h \
  ../hal/src/../../ax32_platform_demo/uiWin.h \
  ../hal/src/../../ax32_platform_demo/../sUI/sUI.h \
@@ -480,6 +482,10 @@ Debug/src_hal_custom_yuv.c.o: ../hal/src/hal_custom_yuv.c \
 ../hal/src/../../ax32_platform_demo/./inc/font.h:
 
 ../hal/src/../../ax32_platform_demo/./inc/icon.h:
+
+../hal/src/../../ax32_platform_demo/./inc/gif.h:
+
+../hal/src/../../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../hal/src/../../ax32_platform_demo/taskManage.h:
 

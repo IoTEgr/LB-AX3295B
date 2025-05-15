@@ -124,6 +124,9 @@ typedef struct
     int rectY;
     int rectWidth;
     int rectHeight;
+    int offsetx;
+    int offsety;
+    uint8_t color_check;
 
     unsigned long nextFrameTime_ms;
 

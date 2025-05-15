@@ -156,6 +156,8 @@ Debug/image_image_encode.c.o: ../multimedia/image/image_encode.c \
  ../multimedia/image/../../ax32_platform_demo/./resource/r_palette.h \
  ../multimedia/image/../../ax32_platform_demo/./inc/font.h \
  ../multimedia/image/../../ax32_platform_demo/./inc/icon.h \
+ ../multimedia/image/../../ax32_platform_demo/./inc/gif.h \
+ ../multimedia/image/../../ax32_platform_demo/./inc/GifDecoder.h \
  ../multimedia/image/../../ax32_platform_demo/taskManage.h \
  ../multimedia/image/../../ax32_platform_demo/uiWin.h \
  ../multimedia/image/../../ax32_platform_demo/../sUI/sUI.h \
@@ -498,6 +500,10 @@ Debug/image_image_encode.c.o: ../multimedia/image/image_encode.c \
 ../multimedia/image/../../ax32_platform_demo/./inc/font.h:
 
 ../multimedia/image/../../ax32_platform_demo/./inc/icon.h:
+
+../multimedia/image/../../ax32_platform_demo/./inc/gif.h:
+
+../multimedia/image/../../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../multimedia/image/../../ax32_platform_demo/taskManage.h:
 

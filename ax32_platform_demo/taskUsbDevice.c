@@ -200,8 +200,7 @@ static int usbDeviceMsgOk(winHandle handle, uint32 parameNum, uint32 *parame)
 		keyState = parame[0];
 	if (keyState == KEY_PRESSED)
 	{
-		gif_play(RES_QD);
-	}
+		}
 	return 0;
 }
 static int usbDeviceMsgUp(winHandle handle, uint32 parameNum, uint32 *parame)

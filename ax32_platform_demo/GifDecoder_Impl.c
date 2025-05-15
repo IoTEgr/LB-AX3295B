@@ -727,7 +727,9 @@ void DecompressAndDisplayFrame(GifDecoder *decoder, unsigned long filePositionAf
         }
     }
     time = XOSTimeGet() - time;
+#if GIF_DEGBUG == 1
     deg_Printf("LZW Decode Time: %d ms\n", time);
+#endif
 #if GIFDEBUG == 1 && DEBUG_DECOMPRESS_AND_DISPLAY == 1
     deg_Printf("File Position After: %u\n", decoder->filePositionCallback());
 #endif
@@ -762,7 +764,7 @@ void DecompressAndDisplayFrame(GifDecoder *decoder, unsigned long filePositionAf
             // 像素级操作（约执行 width*height 次）
             // Pixel not transparent so get color from palette and draw the pixel
             if (decoder->drawPixelCallback)
-                decoder->drawPixelCallback(x, y, decoder->palette[pixel].red, decoder->palette[pixel].green, decoder->palette[pixel].blue);
+                decoder->drawPixelCallback(x + decoder->offsetx, y + decoder->offsety, decoder->palette[pixel].red, decoder->palette[pixel].green, decoder->palette[pixel].blue);
         }
     }
     time = XOSTimeGet() - time;

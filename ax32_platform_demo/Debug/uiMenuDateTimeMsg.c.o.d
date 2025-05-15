@@ -103,8 +103,8 @@ Debug/uiMenuDateTimeMsg.c.o: uiMenuDateTimeMsg.c uiMenuDateTimeRes.c \
  ../multimedia/mp3/inc/../../multimedia.h inc/customer.h \
  inc/resource_manager.h inc/config.h inc/board.h inc/display.h \
  resource/resource.h resource/res.h resource/user_icon.h \
- resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h \
- taskManage.h menu.h
+ resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h inc/gif.h \
+ inc/GifDecoder.h taskManage.h menu.h
 
 uiMenuDateTimeRes.c:
 
@@ -467,6 +467,10 @@ resource/r_palette.h:
 inc/font.h:
 
 inc/icon.h:
+
+inc/gif.h:
+
+inc/GifDecoder.h:
 
 taskManage.h:
 

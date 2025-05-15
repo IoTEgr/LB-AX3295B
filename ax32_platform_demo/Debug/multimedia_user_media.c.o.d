@@ -131,6 +131,8 @@ Debug/multimedia_user_media.c.o: ../multimedia/user_media.c \
  ../multimedia/../ax32_platform_demo/./resource/r_palette.h \
  ../multimedia/../ax32_platform_demo/./inc/font.h \
  ../multimedia/../ax32_platform_demo/./inc/icon.h \
+ ../multimedia/../ax32_platform_demo/./inc/gif.h \
+ ../multimedia/../ax32_platform_demo/./inc/GifDecoder.h \
  ../multimedia/../ax32_platform_demo/taskManage.h \
  ../multimedia/../ax32_platform_demo/uiWin.h \
  ../multimedia/../ax32_platform_demo/../sUI/sUI.h \
@@ -473,6 +475,10 @@ Debug/multimedia_user_media.c.o: ../multimedia/user_media.c \
 ../multimedia/../ax32_platform_demo/./inc/font.h:
 
 ../multimedia/../ax32_platform_demo/./inc/icon.h:
+
+../multimedia/../ax32_platform_demo/./inc/gif.h:
+
+../multimedia/../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../multimedia/../ax32_platform_demo/taskManage.h:
 

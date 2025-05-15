@@ -133,6 +133,7 @@ Debug/resource_user_str.c.o: resource/user_str.c \
  resource/.././resource/res.h resource/.././resource/user_icon.h \
  resource/.././resource/user_str.h resource/.././resource/r_palette.h \
  resource/.././inc/font.h resource/.././inc/icon.h \
+ resource/.././inc/gif.h resource/.././inc/GifDecoder.h \
  resource/../taskManage.h resource/../uiWin.h resource/../../sUI/sUI.h \
  resource/../../sUI/button.h resource/../../sUI/widget.h \
  resource/../../sUI/winManage.h resource/../../sUI/mType.h \
@@ -460,6 +461,10 @@ resource/.././resource/r_palette.h:
 resource/.././inc/font.h:
 
 resource/.././inc/icon.h:
+
+resource/.././inc/gif.h:
+
+resource/.././inc/GifDecoder.h:
 
 resource/../taskManage.h:
 

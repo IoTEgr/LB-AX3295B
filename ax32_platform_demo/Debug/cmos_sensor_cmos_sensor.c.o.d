@@ -157,6 +157,8 @@ Debug/cmos_sensor_cmos_sensor.c.o: ../device/cmos_sensor/cmos_sensor.c \
  ../device/cmos_sensor/../../ax32_platform_demo/./resource/r_palette.h \
  ../device/cmos_sensor/../../ax32_platform_demo/./inc/font.h \
  ../device/cmos_sensor/../../ax32_platform_demo/./inc/icon.h \
+ ../device/cmos_sensor/../../ax32_platform_demo/./inc/gif.h \
+ ../device/cmos_sensor/../../ax32_platform_demo/./inc/GifDecoder.h \
  ../device/cmos_sensor/../../ax32_platform_demo/taskManage.h \
  ../device/cmos_sensor/../../ax32_platform_demo/uiWin.h \
  ../device/cmos_sensor/../../ax32_platform_demo/../sUI/sUI.h \
@@ -499,6 +501,10 @@ Debug/cmos_sensor_cmos_sensor.c.o: ../device/cmos_sensor/cmos_sensor.c \
 ../device/cmos_sensor/../../ax32_platform_demo/./inc/font.h:
 
 ../device/cmos_sensor/../../ax32_platform_demo/./inc/icon.h:
+
+../device/cmos_sensor/../../ax32_platform_demo/./inc/gif.h:
+
+../device/cmos_sensor/../../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../device/cmos_sensor/../../ax32_platform_demo/taskManage.h:
 

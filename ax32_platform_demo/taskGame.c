@@ -11,6 +11,7 @@ static u8 *game_base_buf;
 static disp_frame_t *game_show_buf = 0;
 static u16 bk_w, bk_h;
 static XWork_T *game_xwork;
+u8 *first_y_buf;
 
 #define SYSTEM_PCM_BUFFER_SIZE_MAX (300 * 1024)
 #define SYSTEM_PCM_BUFFER_SIZE 512
@@ -58,6 +59,7 @@ void gameExit()
 
 void taskGameOpen(uint32 arg)
 {
+	first_y_buf = hal_sysMemMalloc(TFT_WIDTH * TFT_HEIGHT * 3 / 2, 32);
 	deg_Printf("game open.\n");
 	game_audio_init();
 	game_xwork = XWorkCreate(3, gameTickGenerator);
@@ -81,6 +83,7 @@ void taskGameService(uint32 arg)
 }
 void taskGameClose(uint32 arg)
 {
+	hal_sysMemFree(first_y_buf);
 	u32 i;
 	XWorkDestory(game_xwork);
 	for (i = 0; i < GAME_AUDIO_NUM; i++)
@@ -217,7 +220,13 @@ void game_key_event()
 		{
 			XMsgQPost(SysCtrl.sysQ, (void *)makeEvent(msgEvent[gameKeyType], 0));
 			if (gameKeySoundCount == 4 && audioPlaybackGetStatus() == MEDIA_STAT_STOP)
-				game_audio_play(RES_MUSIC_KEY_SOUND, 0, 0);
+			{
+				if (gameEntry == game_whackamole_entry && gameKeyType == GAME_KEY_OK)
+				{
+				}
+				else
+					game_audio_play(RES_MUSIC_KEY_SOUND, 0, 0);
+			}
 			fps_count_reset();
 		}
 		else

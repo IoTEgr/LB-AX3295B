@@ -155,6 +155,8 @@ Debug/video_video_playback.c.o: ../multimedia/video/video_playback.c \
  ../multimedia/video/../../ax32_platform_demo/./resource/r_palette.h \
  ../multimedia/video/../../ax32_platform_demo/./inc/font.h \
  ../multimedia/video/../../ax32_platform_demo/./inc/icon.h \
+ ../multimedia/video/../../ax32_platform_demo/./inc/gif.h \
+ ../multimedia/video/../../ax32_platform_demo/./inc/GifDecoder.h \
  ../multimedia/video/../../ax32_platform_demo/taskManage.h \
  ../multimedia/video/../../ax32_platform_demo/uiWin.h \
  ../multimedia/video/../../ax32_platform_demo/../sUI/sUI.h \
@@ -499,6 +501,10 @@ Debug/video_video_playback.c.o: ../multimedia/video/video_playback.c \
 ../multimedia/video/../../ax32_platform_demo/./inc/font.h:
 
 ../multimedia/video/../../ax32_platform_demo/./inc/icon.h:
+
+../multimedia/video/../../ax32_platform_demo/./inc/gif.h:
+
+../multimedia/video/../../ax32_platform_demo/./inc/GifDecoder.h:
 
 ../multimedia/video/../../ax32_platform_demo/taskManage.h:
 

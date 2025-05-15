@@ -2,9 +2,9 @@
 #define __GIF_H__
 
 #define MAX_GIF_FRAMES 64 // 最大支持32帧
-#define GIF_HEIGHT 240    // GIF高度
-#define GIF_WIDTH 320     // GIF宽度
-#define YUV_SIZE (GIF_HEIGHT * GIF_WIDTH * 3 / 2)
+#define GIF_LCD_WIDTH 320
+#define GIF_LCD_HEIGHT 240
+#define GIF_DEGBUG 0
 
 typedef struct
 {
@@ -25,6 +25,7 @@ typedef struct
     u32 gif_addr;      // GIF地址
     u32 offset;        // 偏移量
     u32 size;          // GIF大小
+    u8 *gif_bk;
 } GIF_Context;
 // 添加YUV420颜色结构体定义
 typedef struct yuv_420
@@ -34,5 +35,5 @@ typedef struct yuv_420
     uint8_t v; // 色度V分量
 } yuv_420;
 // 初始化GIF（传入NVFS资源ID）
-int gif_play(u32 res_id);
+int gif_play(u32 res_id, u8 *gif_bk, int posx, int posy, uint8_t color_check, int gif_music_id);
 #endif

@@ -102,8 +102,8 @@ Debug/uiTipsMsg.c.o: uiTipsMsg.c uitipsRes.c uiWin.h ../sUI/sUI.h \
  ../multimedia/mp3/inc/../../multimedia.h inc/customer.h \
  inc/resource_manager.h inc/config.h inc/board.h inc/display.h \
  resource/resource.h resource/res.h resource/user_icon.h \
- resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h \
- taskManage.h menu.h
+ resource/user_str.h resource/r_palette.h inc/font.h inc/icon.h inc/gif.h \
+ inc/GifDecoder.h taskManage.h menu.h
 
 uitipsRes.c:
 
@@ -466,6 +466,10 @@ resource/r_palette.h:
 inc/font.h:
 
 inc/icon.h:
+
+inc/gif.h:
+
+inc/GifDecoder.h:
 
 taskManage.h:
 
